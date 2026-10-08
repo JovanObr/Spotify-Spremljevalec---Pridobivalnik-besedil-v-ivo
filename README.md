@@ -1,10 +1,10 @@
-# 🎵 Spotify Sound Companion
+# Spotify Sound Companion
 
 A lightweight Python application that connects to your active Spotify session to fetch real-time playback stats, track info, and song lyrics. Designed as a modular service integration project with upcoming web dashboard and AI enhancement features.
 
 ---
 
-## 🚀 Features
+## Features
 
 * **Real-time Track Polling:** Automatically detects the track currently playing on your Spotify account.
 * **Lyrics Synchronization:** Fetches matching song lyrics using the `Lyrics.ovh` REST API.
@@ -13,7 +13,7 @@ A lightweight Python application that connects to your active Spotify session to
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 * **Language:** Python 3.9+
 * **APIs & Services:**
@@ -23,7 +23,41 @@ A lightweight Python application that connects to your active Spotify session to
 
 ---
 
-## 🗺️ Project Roadmap (Upcoming Features)
+## Data Specifications
+
+Data transferred over REST APIs using JSON over HTTPS.
+
+### 1. Spotify Currently Playing Payload
+* **Endpoint:** `GET /v1/me/player/currently-playing`
+* **Data Types & Fields:**
+  * `is_playing`: `boolean` (current status)
+  * `item.name`: `string` (track title)
+  * `item.artists[].name`: `string` (artist names)
+  * `item.album.images[].url`: `string` (HTTPS URL to cover image)
+  * `item.duration_ms`: `integer` (track duration)
+
+### 2. Lyrics API Payload
+* **Endpoint:** `GET /v1/{artist}/{title}`
+* **Data Types & Fields:**
+  * `lyrics`: `string` (raw lyrics with newline characters)
+
+---
+
+## Service Documentation
+
+1. **Spotify Web API**
+   * **Description:** Provides metadata for tracks, currently playing media, user library data, and playlist control.
+   * **Auth:** OAuth 2.0 (Authorization Code Flow)
+   * **Docs:** https://developer.spotify.com/documentation/web-api
+
+2. **Lyrics.ovh API**
+   * **Description:** Free public REST service for retrieving song text by artist and track title.
+   * **Auth:** None (Public API)
+   * **Docs:** https://lyricsovh.docs.apiary.io/
+
+---
+
+## Project Roadmap (Upcoming Features)
 
 The project is designed to expand across three major development milestones:
 
@@ -37,7 +71,7 @@ The project is designed to expand across three major development milestones:
 
 ---
 
-## ⚙️ Setup & Installation
+## Setup & Installation
 
 ### 1. Prerequisites
 * Python 3.9 or higher.
@@ -69,7 +103,7 @@ SPOTIPY_REDIRECT_URI="http://127.0.0.1:8888/callback"
 
 ---
 
-## 💻 Usage
+## Usage
 
 Run the main script to start listening for active Spotify playback:
 
@@ -79,8 +113,3 @@ python main.py
 
 On first run, a browser window will open asking you to log into Spotify and authorize the app. Once authorized, the terminal will print details and lyrics for whatever track is currently playing.
 
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
