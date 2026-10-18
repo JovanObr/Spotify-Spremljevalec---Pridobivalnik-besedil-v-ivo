@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skladbe>
+    <skladba id="S1" artistId="A1">
+        <naslov>Blinding Lights</naslov>
+        <trajanjeSekunde>200</trajanjeSekunde>
+        <stPredvajanj>3800000000</stPredvajanj>
+        <datumIzdaje>2019-11-29</datumIzdaje>
+        <opomba>Hit single</opomba>
+    </skladba>
+    <skladba id="S2" artistId="A2">
+        <naslov>Levitating</naslov>
+        <trajanjeSekunde>203</trajanjeSekunde>
+        <stPredvajanj>2100000000</stPredvajanj>
+        <datumIzdaje>2020-03-27</datumIzdaje>
+        <opomba></opomba>
+    </skladba>
+    <skladba id="S3" artistId="A3"><naslov>Bad Guy</naslov><trajanjeSekunde>194</trajanjeSekunde><stPredvajanj>2500000000</stPredvajanj><datumIzdaje>2019-03-29</datumIzdaje><opomba>Grammy winner</opomba></skladba>
+    <skladba id="S4" artistId="A4"><naslov>Believer</naslov><trajanjeSekunde>204</trajanjeSekunde><stPredvajanj>2900000000</stPredvajanj><datumIzdaje>2017-02-01</datumIzdaje><opomba/></skladba>
+    <skladba id="S5" artistId="A5"><naslov>Shape of You</naslov><trajanjeSekunde>263</trajanjeSekunde><stPredvajanj>3600000000</stPredvajanj><datumIzdaje>2017-01-06</datumIzdaje><opomba>Global hit</opomba></skladba>
+    <skladba id="S6" artistId="A6"><naslov>Get Lucky</naslov><trajanjeSekunde>248</trajanjeSekunde><stPredvajanj>1200000000</stPredvajanj><datumIzdaje>2013-04-19</datumIzdaje><opomba/></skladba>
+    <skladba id="S7" artistId="A7"><naslov>Viva La Vida</naslov><trajanjeSekunde>242</trajanjeSekunde><stPredvajanj>1700000000</stPredvajanj><datumIzdaje>2008-05-25</datumIzdaje><opomba>Classic</opomba></skladba>
+    <skladba id="S8" artistId="A8"><naslov>Circles</naslov><trajanjeSekunde>215</trajanjeSekunde><stPredvajanj>2200000000</stPredvajanj><datumIzdaje>2019-08-30</datumIzdaje><opomba/></skladba>
+    <skladba id="S9" artistId="A9"><naslov>Anti-Hero</naslov><trajanjeSekunde>200</trajanjeSekunde><stPredvajanj>1100000000</stPredvajanj><datumIzdaje>2022-10-21</datumIzdaje><opomba>Midnights</opomba></skladba>
+    <skladba id="S10" artistId="A10"><naslov>Do I Wanna Know?</naslov><trajanjeSekunde>272</trajanjeSekunde><stPredvajanj>1800000000</stPredvajanj><datumIzdaje>2013-06-19</datumIzdaje><opomba/></skladba>
+    <skladba id="S11" artistId="A11"><naslov>Wake Me Up</naslov><trajanjeSekunde>249</trajanjeSekunde><stPredvajanj>2300000000</stPredvajanj><datumIzdaje>2013-06-17</datumIzdaje><opomba/></skladba>
+</skladbe>

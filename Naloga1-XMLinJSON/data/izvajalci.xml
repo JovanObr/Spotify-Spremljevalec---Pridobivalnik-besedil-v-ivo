@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izvajalci>
+    <izvajalec id="A1">
+        <ime>The Weeknd</ime>
+        <zvrst>Pop</zvrst>
+        <drzava>Kanada</drzava>
+        <datumDebuta>2010-03-21</datumDebuta>
+    </izvajalec>
+    <izvajalec id="A2">
+        <ime>Dua Lipa</ime>
+        <zvrst>Pop</zvrst>
+        <drzava>Združeno kraljestvo</drzava>
+        <datumDebuta>2015-08-21</datumDebuta>
+    </izvajalec>
+    <izvajalec id="A3"><ime>Billie Eilish</ime><zvrst>Alternative</zvrst><drzava>ZDA</drzava><datumDebuta>2015-11-18</datumDebuta></izvajalec>
+    <izvajalec id="A4"><ime>Imagine Dragons</ime><zvrst>Rock</zvrst><drzava>ZDA</drzava><datumDebuta>2008-01-01</datumDebuta></izvajalec>
+    <izvajalec id="A5"><ime>Ed Sheeran</ime><zvrst>Pop</zvrst><drzava>Združeno kraljestvo</drzava><datumDebuta>2004-01-01</datumDebuta></izvajalec>
+    <izvajalec id="A6"><ime>Daft Punk</ime><zvrst>Electronic</zvrst><drzava>Francija</drzava><datumDebuta>1993-01-01</datumDebuta></izvajalec>
+    <izvajalec id="A7"><ime>Coldplay</ime><zvrst>Rock</zvrst><drzava>Združeno kraljestvo</drzava><datumDebuta>1996-01-01</datumDebuta></izvajalec>
+    <izvajalec id="A8"><ime>Post Malone</ime><zvrst>Hip Hop</zvrst><drzava>ZDA</drzava><datumDebuta>2013-01-01</datumDebuta></izvajalec>
+    <izvajalec id="A9"><ime>Taylor Swift</ime><zvrst>Pop</zvrst><drzava>ZDA</drzava><datumDebuta>2006-10-24</datumDebuta></izvajalec>
+    <izvajalec id="A10"><ime>Arctic Monkeys</ime><zvrst>Indie</zvrst><drzava>Združeno kraljestvo</drzava><datumDebuta>2002-01-01</datumDebuta></izvajalec>
+    <izvajalec id="A11"><ime>Avicii</ime><zvrst>Electronic</zvrst><drzava>Švedska</drzava><datumDebuta>2008-01-01</datumDebuta></izvajalec>
+</izvajalci>

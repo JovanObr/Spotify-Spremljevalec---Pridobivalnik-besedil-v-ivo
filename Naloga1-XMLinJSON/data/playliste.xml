@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<playlisti>
+    <playlist id="P1" trackId="S1">
+        <naziv>Top Pop 2020</naziv>
+        <uporabnik>Jovan</uporabnik>
+        <datumKreiranja>2026-01-10</datumKreiranja>
+    </playlist>
+    <playlist id="P2" trackId="S2">
+        <naziv>Workout Mix</naziv>
+        <uporabnik>Ana</uporabnik>
+        <datumKreiranja>2026-02-15</datumKreiranja>
+    </playlist>
+    <playlist id="P3" trackId="S3"><naziv>Alternative Vibes</naziv><uporabnik>Jovan</uporabnik><datumKreiranja>2026-01-12</datumKreiranja></playlist>
+    <playlist id="P4" trackId="S4"><naziv>Rock Anthems</naziv><uporabnik>Marko</uporabnik><datumKreiranja>2026-02-01</datumKreiranja></playlist>
+    <playlist id="P5" trackId="S5"><naziv>Top Pop 2020</naziv><uporabnik>Jovan</uporabnik><datumKreiranja>2026-01-10</datumKreiranja></playlist>
+    <playlist id="P6" trackId="S6"><naziv>Electronic Chill</naziv><uporabnik>Ana</uporabnik><datumKreiranja>2026-03-01</datumKreiranja></playlist>
+    <playlist id="P7" trackId="S7"><naziv>Rock Anthems</naziv><uporabnik>Marko</uporabnik><datumKreiranja>2026-02-01</datumKreiranja></playlist>
+    <playlist id="P8" trackId="S8"><naziv>Workout Mix</naziv><uporabnik>Ana</uporabnik><datumKreiranja>2026-02-15</datumKreiranja></playlist>
+    <playlist id="P9" trackId="S9"><naziv>Pop Hits</naziv><uporabnik>Jovan</uporabnik><datumKreiranja>2026-03-05</datumKreiranja></playlist>
+    <playlist id="P10" trackId="S10"><naziv>Alternative Vibes</naziv><uporabnik>Marko</uporabnik><datumKreiranja>2026-01-12</datumKreiranja></playlist>
+    <playlist id="P11" trackId="S11"><naziv>Electronic Chill</naziv><uporabnik>Ana</uporabnik><datumKreiranja>2026-03-01</datumKreiranja></playlist>
+</playlisti>
