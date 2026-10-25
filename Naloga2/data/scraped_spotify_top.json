@@ -1,0 +1,602 @@
+[
+    {
+        "id": "SPOTIFY_TOP_1",
+        "naslov": "1",
+        "izvajalec": "\"Blinding Lights\"",
+        "stPredvajanj": "The Weeknd"
+    },
+    {
+        "id": "SPOTIFY_TOP_2",
+        "naslov": "2",
+        "izvajalec": "\"Shape Of You\"",
+        "stPredvajanj": "Ed Sheeran"
+    },
+    {
+        "id": "SPOTIFY_TOP_3",
+        "naslov": "3",
+        "izvajalec": "\"Sweater Weather\"",
+        "stPredvajanj": "The Neighbourhood"
+    },
+    {
+        "id": "SPOTIFY_TOP_4",
+        "naslov": "4",
+        "izvajalec": "\"Starboy\"",
+        "stPredvajanj": "The WeekndandDaft Punk"
+    },
+    {
+        "id": "SPOTIFY_TOP_5",
+        "naslov": "5",
+        "izvajalec": "\"As It Was\"",
+        "stPredvajanj": "Harry Styles"
+    },
+    {
+        "id": "SPOTIFY_TOP_6",
+        "naslov": "6",
+        "izvajalec": "\"One Dance\"",
+        "stPredvajanj": "Drake,Wizkid, andKyla"
+    },
+    {
+        "id": "SPOTIFY_TOP_7",
+        "naslov": "7",
+        "izvajalec": "\"Sunflower\"",
+        "stPredvajanj": "Post MaloneandSwae Lee"
+    },
+    {
+        "id": "SPOTIFY_TOP_8",
+        "naslov": "8",
+        "izvajalec": "\"Someone You Loved\"",
+        "stPredvajanj": "Lewis Capaldi"
+    },
+    {
+        "id": "SPOTIFY_TOP_9",
+        "naslov": "9",
+        "izvajalec": "\"Perfect\"",
+        "stPredvajanj": "Ed Sheeran"
+    },
+    {
+        "id": "SPOTIFY_TOP_10",
+        "naslov": "10",
+        "izvajalec": "\"Stay\"",
+        "stPredvajanj": "The Kid LaroiandJustin Bieber"
+    },
+    {
+        "id": "SPOTIFY_TOP_11",
+        "naslov": "11",
+        "izvajalec": "\"Die With A Smile\"",
+        "stPredvajanj": "Lady GagaandBruno Mars"
+    },
+    {
+        "id": "SPOTIFY_TOP_12",
+        "naslov": "12",
+        "izvajalec": "\"I Wanna Be Yours\"",
+        "stPredvajanj": "Arctic Monkeys"
+    },
+    {
+        "id": "SPOTIFY_TOP_13",
+        "naslov": "13",
+        "izvajalec": "\"Birds of a Feather\"",
+        "stPredvajanj": "Billie Eilish"
+    },
+    {
+        "id": "SPOTIFY_TOP_14",
+        "naslov": "14",
+        "izvajalec": "\"Yellow\"",
+        "stPredvajanj": "Coldplay"
+    },
+    {
+        "id": "SPOTIFY_TOP_15",
+        "naslov": "15",
+        "izvajalec": "\"The Night We Met\"",
+        "stPredvajanj": "Lord Huron"
+    },
+    {
+        "id": "SPOTIFY_TOP_16",
+        "naslov": "16",
+        "izvajalec": "\"Believer\"",
+        "stPredvajanj": "Imagine Dragons"
+    },
+    {
+        "id": "SPOTIFY_TOP_17",
+        "naslov": "17",
+        "izvajalec": "\"Riptide\"",
+        "stPredvajanj": "Vance Joy"
+    },
+    {
+        "id": "SPOTIFY_TOP_18",
+        "naslov": "18",
+        "izvajalec": "\"Heat Waves\"",
+        "stPredvajanj": "Glass Animals"
+    },
+    {
+        "id": "SPOTIFY_TOP_19",
+        "naslov": "19",
+        "izvajalec": "\"Closer\"",
+        "stPredvajanj": "The ChainsmokersandHalsey"
+    },
+    {
+        "id": "SPOTIFY_TOP_20",
+        "naslov": "20",
+        "izvajalec": "\"Lovely\"",
+        "stPredvajanj": "Billie EilishandKhalid"
+    },
+    {
+        "id": "SPOTIFY_TOP_21",
+        "naslov": "21",
+        "izvajalec": "\"Every Breath You Take\"",
+        "stPredvajanj": "The Police"
+    },
+    {
+        "id": "SPOTIFY_TOP_22",
+        "naslov": "22",
+        "izvajalec": "\"Something Just Like This\"",
+        "stPredvajanj": "The ChainsmokersandColdplay"
+    },
+    {
+        "id": "SPOTIFY_TOP_23",
+        "naslov": "23",
+        "izvajalec": "\"Iris\"",
+        "stPredvajanj": "The Goo Goo Dolls"
+    },
+    {
+        "id": "SPOTIFY_TOP_24",
+        "naslov": "24",
+        "izvajalec": "\"Another Love\"",
+        "stPredvajanj": "Tom Odell"
+    },
+    {
+        "id": "SPOTIFY_TOP_25",
+        "naslov": "25",
+        "izvajalec": "\"Say You Won't Let Go\"",
+        "stPredvajanj": "James Arthur"
+    },
+    {
+        "id": "SPOTIFY_TOP_26",
+        "naslov": "26",
+        "izvajalec": "\"Counting Stars\"",
+        "stPredvajanj": "OneRepublic"
+    },
+    {
+        "id": "SPOTIFY_TOP_27",
+        "naslov": "27",
+        "izvajalec": "\"Take Me To Church\"",
+        "stPredvajanj": "Hozier"
+    },
+    {
+        "id": "SPOTIFY_TOP_28",
+        "naslov": "28",
+        "izvajalec": "\"Photograph\"",
+        "stPredvajanj": "Ed Sheeran"
+    },
+    {
+        "id": "SPOTIFY_TOP_29",
+        "naslov": "29",
+        "izvajalec": "\"Viva La Vida\"",
+        "stPredvajanj": "Coldplay"
+    },
+    {
+        "id": "SPOTIFY_TOP_30",
+        "naslov": "30",
+        "izvajalec": "\"Locked Out Of Heaven\"",
+        "stPredvajanj": "Bruno Mars"
+    },
+    {
+        "id": "SPOTIFY_TOP_31",
+        "naslov": "31",
+        "izvajalec": "\"Can't Hold Us\"",
+        "stPredvajanj": "Macklemore & Ryan LewisandRay Dalton"
+    },
+    {
+        "id": "SPOTIFY_TOP_32",
+        "naslov": "32",
+        "izvajalec": "\"Mr. Brightside\"",
+        "stPredvajanj": "The Killers"
+    },
+    {
+        "id": "SPOTIFY_TOP_33",
+        "naslov": "33",
+        "izvajalec": "\"Just the Way You Are\"",
+        "stPredvajanj": "Bruno Mars"
+    },
+    {
+        "id": "SPOTIFY_TOP_34",
+        "naslov": "34",
+        "izvajalec": "\"Dance Monkey\"",
+        "stPredvajanj": "Tones And I"
+    },
+    {
+        "id": "SPOTIFY_TOP_35",
+        "naslov": "35",
+        "izvajalec": "\"Cruel Summer\"",
+        "stPredvajanj": "Taylor Swift"
+    },
+    {
+        "id": "SPOTIFY_TOP_36",
+        "naslov": "36",
+        "izvajalec": "\"Rockstar\"",
+        "stPredvajanj": "Post Maloneand21 Savage"
+    },
+    {
+        "id": "SPOTIFY_TOP_37",
+        "naslov": "37",
+        "izvajalec": "\"Die For You\"",
+        "stPredvajanj": "The Weeknd"
+    },
+    {
+        "id": "SPOTIFY_TOP_38",
+        "naslov": "38",
+        "izvajalec": "\"Señorita\"",
+        "stPredvajanj": "Shawn MendesandCamila Cabello"
+    },
+    {
+        "id": "SPOTIFY_TOP_39",
+        "naslov": "39",
+        "izvajalec": "\"That's What I Like\"",
+        "stPredvajanj": "Bruno Mars"
+    },
+    {
+        "id": "SPOTIFY_TOP_40",
+        "naslov": "40",
+        "izvajalec": "\"In The End\"",
+        "stPredvajanj": "Linkin Park"
+    },
+    {
+        "id": "SPOTIFY_TOP_41",
+        "naslov": "41",
+        "izvajalec": "\"Watermelon Sugar\"",
+        "stPredvajanj": "Harry Styles"
+    },
+    {
+        "id": "SPOTIFY_TOP_42",
+        "naslov": "42",
+        "izvajalec": "\"Love Yourself\"",
+        "stPredvajanj": "Justin Bieber"
+    },
+    {
+        "id": "SPOTIFY_TOP_43",
+        "naslov": "43",
+        "izvajalec": "\"Don't Start Now\"",
+        "stPredvajanj": "Dua Lipa"
+    },
+    {
+        "id": "SPOTIFY_TOP_44",
+        "naslov": "44",
+        "izvajalec": "\"When I Was Your Man\"",
+        "stPredvajanj": "Bruno Mars"
+    },
+    {
+        "id": "SPOTIFY_TOP_45",
+        "naslov": "45",
+        "izvajalec": "\"Billie Jean\"",
+        "stPredvajanj": "Michael Jackson"
+    },
+    {
+        "id": "SPOTIFY_TOP_46",
+        "naslov": "46",
+        "izvajalec": "\"Circles\"",
+        "stPredvajanj": "Post Malone"
+    },
+    {
+        "id": "SPOTIFY_TOP_47",
+        "naslov": "47",
+        "izvajalec": "\"Bohemian Rhapsody\"",
+        "stPredvajanj": "Queen"
+    },
+    {
+        "id": "SPOTIFY_TOP_48",
+        "naslov": "48",
+        "izvajalec": "\"Without Me\"",
+        "stPredvajanj": "Eminem"
+    },
+    {
+        "id": "SPOTIFY_TOP_49",
+        "naslov": "49",
+        "izvajalec": "\"Let Me Love You\"",
+        "stPredvajanj": "DJ SnakeandJustin Bieber"
+    },
+    {
+        "id": "SPOTIFY_TOP_50",
+        "naslov": "50",
+        "izvajalec": "\"Wake Me Up\"",
+        "stPredvajanj": "AviciiandAloe Blacc"
+    },
+    {
+        "id": "SPOTIFY_TOP_51",
+        "naslov": "51",
+        "izvajalec": "\"Goosebumps\"",
+        "stPredvajanj": "Travis ScottandKendrick Lamar"
+    },
+    {
+        "id": "SPOTIFY_TOP_52",
+        "naslov": "52",
+        "izvajalec": "\"Thinking Out Loud\"",
+        "stPredvajanj": "Ed Sheeran"
+    },
+    {
+        "id": "SPOTIFY_TOP_53",
+        "naslov": "53",
+        "izvajalec": "\"Espresso\"",
+        "stPredvajanj": "Sabrina Carpenter"
+    },
+    {
+        "id": "SPOTIFY_TOP_54",
+        "naslov": "54",
+        "izvajalec": "\"Lucid Dreams\"",
+        "stPredvajanj": "Juice Wrld"
+    },
+    {
+        "id": "SPOTIFY_TOP_55",
+        "naslov": "55",
+        "izvajalec": "\"All The Stars\"",
+        "stPredvajanj": "Kendrick LamarandSZA"
+    },
+    {
+        "id": "SPOTIFY_TOP_56",
+        "naslov": "56",
+        "izvajalec": "\"All of Me\"",
+        "stPredvajanj": "John Legend"
+    },
+    {
+        "id": "SPOTIFY_TOP_57",
+        "naslov": "57",
+        "izvajalec": "\"Beautiful Things\"",
+        "stPredvajanj": "Benson Boone"
+    },
+    {
+        "id": "SPOTIFY_TOP_58",
+        "naslov": "58",
+        "izvajalec": "\"Treat You Better\"",
+        "stPredvajanj": "Shawn Mendes"
+    },
+    {
+        "id": "SPOTIFY_TOP_59",
+        "naslov": "59",
+        "izvajalec": "\"God's Plan\"",
+        "stPredvajanj": "Drake"
+    },
+    {
+        "id": "SPOTIFY_TOP_60",
+        "naslov": "60",
+        "izvajalec": "\"Stressed Out\"",
+        "stPredvajanj": "Twenty One Pilots"
+    },
+    {
+        "id": "SPOTIFY_TOP_61",
+        "naslov": "61",
+        "izvajalec": "\"Creep\"",
+        "stPredvajanj": "Radiohead"
+    },
+    {
+        "id": "SPOTIFY_TOP_62",
+        "naslov": "62",
+        "izvajalec": "\"Shallow\"",
+        "stPredvajanj": "Lady GagaandBradley Cooper"
+    },
+    {
+        "id": "SPOTIFY_TOP_63",
+        "naslov": "63",
+        "izvajalec": "\"The Hills\"",
+        "stPredvajanj": "The Weeknd"
+    },
+    {
+        "id": "SPOTIFY_TOP_64",
+        "naslov": "64",
+        "izvajalec": "\"Do I Wanna Know?\"",
+        "stPredvajanj": "Arctic Monkeys"
+    },
+    {
+        "id": "SPOTIFY_TOP_65",
+        "naslov": "65",
+        "izvajalec": "\"Demons\"",
+        "stPredvajanj": "Imagine Dragons"
+    },
+    {
+        "id": "SPOTIFY_TOP_66",
+        "naslov": "66",
+        "izvajalec": "\"See You Again\"",
+        "stPredvajanj": "Tyler, the CreatorandKali Uchis"
+    },
+    {
+        "id": "SPOTIFY_TOP_67",
+        "naslov": "67",
+        "izvajalec": "\"Wonderwall\"",
+        "stPredvajanj": "Oasis"
+    },
+    {
+        "id": "SPOTIFY_TOP_68",
+        "naslov": "68",
+        "izvajalec": "\"Smells Like Teen Spirit\"",
+        "stPredvajanj": "Nirvana"
+    },
+    {
+        "id": "SPOTIFY_TOP_69",
+        "naslov": "69",
+        "izvajalec": "\"Thunder\"",
+        "stPredvajanj": "Imagine Dragons"
+    },
+    {
+        "id": "SPOTIFY_TOP_70",
+        "naslov": "70",
+        "izvajalec": "\"Seven\"",
+        "stPredvajanj": "Jung KookandLatto"
+    },
+    {
+        "id": "SPOTIFY_TOP_71",
+        "naslov": "71",
+        "izvajalec": "\"Unforgettable\"",
+        "stPredvajanj": "French MontanaandSwae Lee"
+    },
+    {
+        "id": "SPOTIFY_TOP_72",
+        "naslov": "72",
+        "izvajalec": "\"Sorry\"",
+        "stPredvajanj": "Justin Bieber"
+    },
+    {
+        "id": "SPOTIFY_TOP_73",
+        "naslov": "73",
+        "izvajalec": "\"505\"",
+        "stPredvajanj": "Arctic Monkeys"
+    },
+    {
+        "id": "SPOTIFY_TOP_74",
+        "naslov": "74",
+        "izvajalec": "\"No Role Modelz\"",
+        "stPredvajanj": "J. Cole"
+    },
+    {
+        "id": "SPOTIFY_TOP_75",
+        "naslov": "75",
+        "izvajalec": "\"Lose Yourself\"",
+        "stPredvajanj": "Eminem"
+    },
+    {
+        "id": "SPOTIFY_TOP_76",
+        "naslov": "76",
+        "izvajalec": "\"The Scientist\"",
+        "stPredvajanj": "Coldplay"
+    },
+    {
+        "id": "SPOTIFY_TOP_77",
+        "naslov": "77",
+        "izvajalec": "\"Don't Stop Believin'\"",
+        "stPredvajanj": "Journey"
+    },
+    {
+        "id": "SPOTIFY_TOP_78",
+        "naslov": "78",
+        "izvajalec": "\"There's Nothing Holdin' Me Back\"",
+        "stPredvajanj": "Shawn Mendes"
+    },
+    {
+        "id": "SPOTIFY_TOP_79",
+        "naslov": "79",
+        "izvajalec": "\"End of Beginning\"",
+        "stPredvajanj": "Djo"
+    },
+    {
+        "id": "SPOTIFY_TOP_80",
+        "naslov": "80",
+        "izvajalec": "\"Flowers\"",
+        "stPredvajanj": "Miley Cyrus"
+    },
+    {
+        "id": "SPOTIFY_TOP_81",
+        "naslov": "81",
+        "izvajalec": "\"Humble\"",
+        "stPredvajanj": "Kendrick Lamar"
+    },
+    {
+        "id": "SPOTIFY_TOP_82",
+        "naslov": "82",
+        "izvajalec": "\"Dreams\"",
+        "stPredvajanj": "Fleetwood Mac"
+    },
+    {
+        "id": "SPOTIFY_TOP_83",
+        "naslov": "83",
+        "izvajalec": "\"Bad Guy\"",
+        "stPredvajanj": "Billie Eilish"
+    },
+    {
+        "id": "SPOTIFY_TOP_84",
+        "naslov": "84",
+        "izvajalec": "\"Drivers License\"",
+        "stPredvajanj": "Olivia Rodrigo"
+    },
+    {
+        "id": "SPOTIFY_TOP_85",
+        "naslov": "85",
+        "izvajalec": "\"Take On Me\"",
+        "stPredvajanj": "A-ha"
+    },
+    {
+        "id": "SPOTIFY_TOP_86",
+        "naslov": "86",
+        "izvajalec": "\"Numb\"",
+        "stPredvajanj": "Linkin Park"
+    },
+    {
+        "id": "SPOTIFY_TOP_87",
+        "naslov": "87",
+        "izvajalec": "\"7 Rings\"",
+        "stPredvajanj": "Ariana Grande"
+    },
+    {
+        "id": "SPOTIFY_TOP_88",
+        "naslov": "88",
+        "izvajalec": "\"Sweet Child O' Mine\"",
+        "stPredvajanj": "Guns N' Roses"
+    },
+    {
+        "id": "SPOTIFY_TOP_89",
+        "naslov": "89",
+        "izvajalec": "\"Let Her Go\"",
+        "stPredvajanj": "Passenger"
+    },
+    {
+        "id": "SPOTIFY_TOP_90",
+        "naslov": "90",
+        "izvajalec": "\"Kill Bill\"",
+        "stPredvajanj": "SZA"
+    },
+    {
+        "id": "SPOTIFY_TOP_91",
+        "naslov": "91",
+        "izvajalec": "\"One Of The Girls\"",
+        "stPredvajanj": "The Weeknd,Jennie, andLily-Rose Depp"
+    },
+    {
+        "id": "SPOTIFY_TOP_92",
+        "naslov": "92",
+        "izvajalec": "\"Payphone\"",
+        "stPredvajanj": "Maroon 5andWiz Khalifa"
+    },
+    {
+        "id": "SPOTIFY_TOP_93",
+        "naslov": "93",
+        "izvajalec": "\"Save Your Tears\"",
+        "stPredvajanj": "The Weeknd"
+    },
+    {
+        "id": "SPOTIFY_TOP_94",
+        "naslov": "94",
+        "izvajalec": "\"Cold Heart\"",
+        "stPredvajanj": "Elton John,Dua LipaandPnau"
+    },
+    {
+        "id": "SPOTIFY_TOP_95",
+        "naslov": "95",
+        "izvajalec": "\"Lean On\"",
+        "stPredvajanj": "Major Lazer,DJ Snake, andMØ"
+    },
+    {
+        "id": "SPOTIFY_TOP_96",
+        "naslov": "96",
+        "izvajalec": "\"Uptown Funk\"",
+        "stPredvajanj": "Mark RonsonandBruno Mars"
+    },
+    {
+        "id": "SPOTIFY_TOP_97",
+        "naslov": "97",
+        "izvajalec": "\"One Kiss\"",
+        "stPredvajanj": "Calvin HarrisandDua Lipa"
+    },
+    {
+        "id": "SPOTIFY_TOP_98",
+        "naslov": "98",
+        "izvajalec": "\"Danza Kuduro\"",
+        "stPredvajanj": "Don OmarandLucenzo"
+    },
+    {
+        "id": "SPOTIFY_TOP_99",
+        "naslov": "99",
+        "izvajalec": "\"Don't Stop Me Now\"",
+        "stPredvajanj": "Queen"
+    },
+    {
+        "id": "SPOTIFY_TOP_100",
+        "naslov": "100",
+        "izvajalec": "\"Africa\"",
+        "stPredvajanj": "Toto"
+    }
+]

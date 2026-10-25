@@ -1,0 +1,503 @@
+<?xml version='1.0' encoding='utf-8'?>
+<topSpotifySkladbe>
+    <skladba id="SPOTIFY_TOP_1">
+        <naslov>1</naslov>
+        <izvajalec>"Blinding Lights"</izvajalec>
+        <stPredvajanj>The Weeknd</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_2">
+        <naslov>2</naslov>
+        <izvajalec>"Shape Of You"</izvajalec>
+        <stPredvajanj>Ed Sheeran</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_3">
+        <naslov>3</naslov>
+        <izvajalec>"Sweater Weather"</izvajalec>
+        <stPredvajanj>The Neighbourhood</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_4">
+        <naslov>4</naslov>
+        <izvajalec>"Starboy"</izvajalec>
+        <stPredvajanj>The WeekndandDaft Punk</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_5">
+        <naslov>5</naslov>
+        <izvajalec>"As It Was"</izvajalec>
+        <stPredvajanj>Harry Styles</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_6">
+        <naslov>6</naslov>
+        <izvajalec>"One Dance"</izvajalec>
+        <stPredvajanj>Drake,Wizkid, andKyla</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_7">
+        <naslov>7</naslov>
+        <izvajalec>"Sunflower"</izvajalec>
+        <stPredvajanj>Post MaloneandSwae Lee</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_8">
+        <naslov>8</naslov>
+        <izvajalec>"Someone You Loved"</izvajalec>
+        <stPredvajanj>Lewis Capaldi</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_9">
+        <naslov>9</naslov>
+        <izvajalec>"Perfect"</izvajalec>
+        <stPredvajanj>Ed Sheeran</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_10">
+        <naslov>10</naslov>
+        <izvajalec>"Stay"</izvajalec>
+        <stPredvajanj>The Kid LaroiandJustin Bieber</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_11">
+        <naslov>11</naslov>
+        <izvajalec>"Die With A Smile"</izvajalec>
+        <stPredvajanj>Lady GagaandBruno Mars</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_12">
+        <naslov>12</naslov>
+        <izvajalec>"I Wanna Be Yours"</izvajalec>
+        <stPredvajanj>Arctic Monkeys</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_13">
+        <naslov>13</naslov>
+        <izvajalec>"Birds of a Feather"</izvajalec>
+        <stPredvajanj>Billie Eilish</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_14">
+        <naslov>14</naslov>
+        <izvajalec>"Yellow"</izvajalec>
+        <stPredvajanj>Coldplay</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_15">
+        <naslov>15</naslov>
+        <izvajalec>"The Night We Met"</izvajalec>
+        <stPredvajanj>Lord Huron</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_16">
+        <naslov>16</naslov>
+        <izvajalec>"Believer"</izvajalec>
+        <stPredvajanj>Imagine Dragons</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_17">
+        <naslov>17</naslov>
+        <izvajalec>"Riptide"</izvajalec>
+        <stPredvajanj>Vance Joy</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_18">
+        <naslov>18</naslov>
+        <izvajalec>"Heat Waves"</izvajalec>
+        <stPredvajanj>Glass Animals</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_19">
+        <naslov>19</naslov>
+        <izvajalec>"Closer"</izvajalec>
+        <stPredvajanj>The ChainsmokersandHalsey</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_20">
+        <naslov>20</naslov>
+        <izvajalec>"Lovely"</izvajalec>
+        <stPredvajanj>Billie EilishandKhalid</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_21">
+        <naslov>21</naslov>
+        <izvajalec>"Every Breath You Take"</izvajalec>
+        <stPredvajanj>The Police</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_22">
+        <naslov>22</naslov>
+        <izvajalec>"Something Just Like This"</izvajalec>
+        <stPredvajanj>The ChainsmokersandColdplay</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_23">
+        <naslov>23</naslov>
+        <izvajalec>"Iris"</izvajalec>
+        <stPredvajanj>The Goo Goo Dolls</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_24">
+        <naslov>24</naslov>
+        <izvajalec>"Another Love"</izvajalec>
+        <stPredvajanj>Tom Odell</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_25">
+        <naslov>25</naslov>
+        <izvajalec>"Say You Won't Let Go"</izvajalec>
+        <stPredvajanj>James Arthur</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_26">
+        <naslov>26</naslov>
+        <izvajalec>"Counting Stars"</izvajalec>
+        <stPredvajanj>OneRepublic</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_27">
+        <naslov>27</naslov>
+        <izvajalec>"Take Me To Church"</izvajalec>
+        <stPredvajanj>Hozier</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_28">
+        <naslov>28</naslov>
+        <izvajalec>"Photograph"</izvajalec>
+        <stPredvajanj>Ed Sheeran</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_29">
+        <naslov>29</naslov>
+        <izvajalec>"Viva La Vida"</izvajalec>
+        <stPredvajanj>Coldplay</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_30">
+        <naslov>30</naslov>
+        <izvajalec>"Locked Out Of Heaven"</izvajalec>
+        <stPredvajanj>Bruno Mars</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_31">
+        <naslov>31</naslov>
+        <izvajalec>"Can't Hold Us"</izvajalec>
+        <stPredvajanj>Macklemore &amp; Ryan LewisandRay Dalton</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_32">
+        <naslov>32</naslov>
+        <izvajalec>"Mr. Brightside"</izvajalec>
+        <stPredvajanj>The Killers</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_33">
+        <naslov>33</naslov>
+        <izvajalec>"Just the Way You Are"</izvajalec>
+        <stPredvajanj>Bruno Mars</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_34">
+        <naslov>34</naslov>
+        <izvajalec>"Dance Monkey"</izvajalec>
+        <stPredvajanj>Tones And I</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_35">
+        <naslov>35</naslov>
+        <izvajalec>"Cruel Summer"</izvajalec>
+        <stPredvajanj>Taylor Swift</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_36">
+        <naslov>36</naslov>
+        <izvajalec>"Rockstar"</izvajalec>
+        <stPredvajanj>Post Maloneand21 Savage</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_37">
+        <naslov>37</naslov>
+        <izvajalec>"Die For You"</izvajalec>
+        <stPredvajanj>The Weeknd</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_38">
+        <naslov>38</naslov>
+        <izvajalec>"Señorita"</izvajalec>
+        <stPredvajanj>Shawn MendesandCamila Cabello</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_39">
+        <naslov>39</naslov>
+        <izvajalec>"That's What I Like"</izvajalec>
+        <stPredvajanj>Bruno Mars</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_40">
+        <naslov>40</naslov>
+        <izvajalec>"In The End"</izvajalec>
+        <stPredvajanj>Linkin Park</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_41">
+        <naslov>41</naslov>
+        <izvajalec>"Watermelon Sugar"</izvajalec>
+        <stPredvajanj>Harry Styles</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_42">
+        <naslov>42</naslov>
+        <izvajalec>"Love Yourself"</izvajalec>
+        <stPredvajanj>Justin Bieber</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_43">
+        <naslov>43</naslov>
+        <izvajalec>"Don't Start Now"</izvajalec>
+        <stPredvajanj>Dua Lipa</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_44">
+        <naslov>44</naslov>
+        <izvajalec>"When I Was Your Man"</izvajalec>
+        <stPredvajanj>Bruno Mars</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_45">
+        <naslov>45</naslov>
+        <izvajalec>"Billie Jean"</izvajalec>
+        <stPredvajanj>Michael Jackson</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_46">
+        <naslov>46</naslov>
+        <izvajalec>"Circles"</izvajalec>
+        <stPredvajanj>Post Malone</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_47">
+        <naslov>47</naslov>
+        <izvajalec>"Bohemian Rhapsody"</izvajalec>
+        <stPredvajanj>Queen</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_48">
+        <naslov>48</naslov>
+        <izvajalec>"Without Me"</izvajalec>
+        <stPredvajanj>Eminem</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_49">
+        <naslov>49</naslov>
+        <izvajalec>"Let Me Love You"</izvajalec>
+        <stPredvajanj>DJ SnakeandJustin Bieber</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_50">
+        <naslov>50</naslov>
+        <izvajalec>"Wake Me Up"</izvajalec>
+        <stPredvajanj>AviciiandAloe Blacc</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_51">
+        <naslov>51</naslov>
+        <izvajalec>"Goosebumps"</izvajalec>
+        <stPredvajanj>Travis ScottandKendrick Lamar</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_52">
+        <naslov>52</naslov>
+        <izvajalec>"Thinking Out Loud"</izvajalec>
+        <stPredvajanj>Ed Sheeran</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_53">
+        <naslov>53</naslov>
+        <izvajalec>"Espresso"</izvajalec>
+        <stPredvajanj>Sabrina Carpenter</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_54">
+        <naslov>54</naslov>
+        <izvajalec>"Lucid Dreams"</izvajalec>
+        <stPredvajanj>Juice Wrld</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_55">
+        <naslov>55</naslov>
+        <izvajalec>"All The Stars"</izvajalec>
+        <stPredvajanj>Kendrick LamarandSZA</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_56">
+        <naslov>56</naslov>
+        <izvajalec>"All of Me"</izvajalec>
+        <stPredvajanj>John Legend</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_57">
+        <naslov>57</naslov>
+        <izvajalec>"Beautiful Things"</izvajalec>
+        <stPredvajanj>Benson Boone</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_58">
+        <naslov>58</naslov>
+        <izvajalec>"Treat You Better"</izvajalec>
+        <stPredvajanj>Shawn Mendes</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_59">
+        <naslov>59</naslov>
+        <izvajalec>"God's Plan"</izvajalec>
+        <stPredvajanj>Drake</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_60">
+        <naslov>60</naslov>
+        <izvajalec>"Stressed Out"</izvajalec>
+        <stPredvajanj>Twenty One Pilots</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_61">
+        <naslov>61</naslov>
+        <izvajalec>"Creep"</izvajalec>
+        <stPredvajanj>Radiohead</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_62">
+        <naslov>62</naslov>
+        <izvajalec>"Shallow"</izvajalec>
+        <stPredvajanj>Lady GagaandBradley Cooper</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_63">
+        <naslov>63</naslov>
+        <izvajalec>"The Hills"</izvajalec>
+        <stPredvajanj>The Weeknd</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_64">
+        <naslov>64</naslov>
+        <izvajalec>"Do I Wanna Know?"</izvajalec>
+        <stPredvajanj>Arctic Monkeys</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_65">
+        <naslov>65</naslov>
+        <izvajalec>"Demons"</izvajalec>
+        <stPredvajanj>Imagine Dragons</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_66">
+        <naslov>66</naslov>
+        <izvajalec>"See You Again"</izvajalec>
+        <stPredvajanj>Tyler, the CreatorandKali Uchis</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_67">
+        <naslov>67</naslov>
+        <izvajalec>"Wonderwall"</izvajalec>
+        <stPredvajanj>Oasis</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_68">
+        <naslov>68</naslov>
+        <izvajalec>"Smells Like Teen Spirit"</izvajalec>
+        <stPredvajanj>Nirvana</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_69">
+        <naslov>69</naslov>
+        <izvajalec>"Thunder"</izvajalec>
+        <stPredvajanj>Imagine Dragons</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_70">
+        <naslov>70</naslov>
+        <izvajalec>"Seven"</izvajalec>
+        <stPredvajanj>Jung KookandLatto</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_71">
+        <naslov>71</naslov>
+        <izvajalec>"Unforgettable"</izvajalec>
+        <stPredvajanj>French MontanaandSwae Lee</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_72">
+        <naslov>72</naslov>
+        <izvajalec>"Sorry"</izvajalec>
+        <stPredvajanj>Justin Bieber</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_73">
+        <naslov>73</naslov>
+        <izvajalec>"505"</izvajalec>
+        <stPredvajanj>Arctic Monkeys</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_74">
+        <naslov>74</naslov>
+        <izvajalec>"No Role Modelz"</izvajalec>
+        <stPredvajanj>J. Cole</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_75">
+        <naslov>75</naslov>
+        <izvajalec>"Lose Yourself"</izvajalec>
+        <stPredvajanj>Eminem</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_76">
+        <naslov>76</naslov>
+        <izvajalec>"The Scientist"</izvajalec>
+        <stPredvajanj>Coldplay</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_77">
+        <naslov>77</naslov>
+        <izvajalec>"Don't Stop Believin'"</izvajalec>
+        <stPredvajanj>Journey</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_78">
+        <naslov>78</naslov>
+        <izvajalec>"There's Nothing Holdin' Me Back"</izvajalec>
+        <stPredvajanj>Shawn Mendes</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_79">
+        <naslov>79</naslov>
+        <izvajalec>"End of Beginning"</izvajalec>
+        <stPredvajanj>Djo</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_80">
+        <naslov>80</naslov>
+        <izvajalec>"Flowers"</izvajalec>
+        <stPredvajanj>Miley Cyrus</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_81">
+        <naslov>81</naslov>
+        <izvajalec>"Humble"</izvajalec>
+        <stPredvajanj>Kendrick Lamar</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_82">
+        <naslov>82</naslov>
+        <izvajalec>"Dreams"</izvajalec>
+        <stPredvajanj>Fleetwood Mac</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_83">
+        <naslov>83</naslov>
+        <izvajalec>"Bad Guy"</izvajalec>
+        <stPredvajanj>Billie Eilish</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_84">
+        <naslov>84</naslov>
+        <izvajalec>"Drivers License"</izvajalec>
+        <stPredvajanj>Olivia Rodrigo</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_85">
+        <naslov>85</naslov>
+        <izvajalec>"Take On Me"</izvajalec>
+        <stPredvajanj>A-ha</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_86">
+        <naslov>86</naslov>
+        <izvajalec>"Numb"</izvajalec>
+        <stPredvajanj>Linkin Park</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_87">
+        <naslov>87</naslov>
+        <izvajalec>"7 Rings"</izvajalec>
+        <stPredvajanj>Ariana Grande</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_88">
+        <naslov>88</naslov>
+        <izvajalec>"Sweet Child O' Mine"</izvajalec>
+        <stPredvajanj>Guns N' Roses</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_89">
+        <naslov>89</naslov>
+        <izvajalec>"Let Her Go"</izvajalec>
+        <stPredvajanj>Passenger</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_90">
+        <naslov>90</naslov>
+        <izvajalec>"Kill Bill"</izvajalec>
+        <stPredvajanj>SZA</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_91">
+        <naslov>91</naslov>
+        <izvajalec>"One Of The Girls"</izvajalec>
+        <stPredvajanj>The Weeknd,Jennie, andLily-Rose Depp</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_92">
+        <naslov>92</naslov>
+        <izvajalec>"Payphone"</izvajalec>
+        <stPredvajanj>Maroon 5andWiz Khalifa</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_93">
+        <naslov>93</naslov>
+        <izvajalec>"Save Your Tears"</izvajalec>
+        <stPredvajanj>The Weeknd</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_94">
+        <naslov>94</naslov>
+        <izvajalec>"Cold Heart"</izvajalec>
+        <stPredvajanj>Elton John,Dua LipaandPnau</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_95">
+        <naslov>95</naslov>
+        <izvajalec>"Lean On"</izvajalec>
+        <stPredvajanj>Major Lazer,DJ Snake, andMØ</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_96">
+        <naslov>96</naslov>
+        <izvajalec>"Uptown Funk"</izvajalec>
+        <stPredvajanj>Mark RonsonandBruno Mars</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_97">
+        <naslov>97</naslov>
+        <izvajalec>"One Kiss"</izvajalec>
+        <stPredvajanj>Calvin HarrisandDua Lipa</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_98">
+        <naslov>98</naslov>
+        <izvajalec>"Danza Kuduro"</izvajalec>
+        <stPredvajanj>Don OmarandLucenzo</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_99">
+        <naslov>99</naslov>
+        <izvajalec>"Don't Stop Me Now"</izvajalec>
+        <stPredvajanj>Queen</stPredvajanj>
+    </skladba>
+    <skladba id="SPOTIFY_TOP_100">
+        <naslov>100</naslov>
+        <izvajalec>"Africa"</izvajalec>
+        <stPredvajanj>Toto</stPredvajanj>
+    </skladba>
+</topSpotifySkladbe>
