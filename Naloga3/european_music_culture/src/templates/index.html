@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>European Music Culture</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <p class="eyebrow">EUROPEAN CULTURAL STATISTICS</p>
+            <h1>European Music Culture</h1>
+            <p class="subtitle">
+                Explore participation in live performances across European countries.
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>Explore the data</h2>
+            <p>
+                Compare the percentage of people aged 16 and over who attended
+                live performances at least once in the previous 12 months.
+                The category includes theatre, concerts, and ballet.
+            </p>
+            <p class="data-note">
+                Source: Eurostat, dataset ilc_scp03. Available years: 2006, 2015, 2022.
+            </p>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <p class="eyebrow">01 / COUNTRY RANKING</p>
+                    <h2>Top 10 countries</h2>
+                    <p>Rank countries by participation rate in a selected year.</p>
+                </div>
+                <div class="control">
+                    <label for="ranking-year">Year</label>
+                    <select id="ranking-year">
+                        <option value="2022" selected>2022</option>
+                        <option value="2015">2015</option>
+                        <option value="2006">2006</option>
+                    </select>
+                </div>
+            </div>
+
+            <p id="ranking-status" class="status" aria-live="polite"></p>
+            <div id="ranking-chart" class="chart"></div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <p class="eyebrow">02 / COUNTRY COMPARISON</p>
+                    <h2>Compare countries over time</h2>
+                    <p>Select countries to compare their available observations.</p>
+                </div>
+            </div>
+
+            <div class="comparison-controls">
+                <div class="control country-control">
+                    <label for="comparison-countries">Countries</label>
+                    <select id="comparison-countries" multiple size="6">
+                        <option disabled>Loading countries...</option>
+                    </select>
+                    <small>Use Ctrl (Windows) or Cmd (Mac) to select multiple countries.</small>
+                </div>
+                <button id="compare-button" type="button">Compare countries</button>
+            </div>
+
+            <p id="comparison-status" class="status" aria-live="polite"></p>
+            <div id="comparison-chart" class="chart"></div>
+        </section>
+
+        <footer>
+            <p>
+                Data: Eurostat · Participation rates are percentages, not attendance counts.
+            </p>
+        </footer>
+    </main>
+</body>
+</html>

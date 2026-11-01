@@ -1,0 +1,412 @@
+{
+  "version": "2.0",
+  "class": "dataset",
+  "label": "Persons participating in cultural or sport activities in the last 12 months by sex, age, educational attainment, activity type and frequency",
+  "source": "ESTAT",
+  "updated": "2026-04-24T23:00:00+0200",
+  "value": {
+    "101": 13.1,
+    "57": 54.0,
+    "58": 52.8,
+    "59": 30.8,
+    "0": 46.5,
+    "1": 45.1,
+    "2": 38.2,
+    "3": 16.0,
+    "4": 19.4,
+    "5": 10.7,
+    "88": 68.1,
+    "89": 46.6,
+    "36": 41.7,
+    "37": 43.2,
+    "38": 25.3,
+    "6": 36.6,
+    "7": 48.0,
+    "8": 33.2,
+    "12": 52.7,
+    "13": 48.6,
+    "9": 55.0,
+    "10": 59.3,
+    "11": 45.7,
+    "15": 53.4,
+    "16": 56.2,
+    "17": 39.8,
+    "21": 32.1,
+    "22": 33.8,
+    "23": 28.1,
+    "24": 36.8,
+    "25": 32.7,
+    "26": 32.6,
+    "75": 61.0,
+    "76": 66.7,
+    "77": 33.4,
+    "27": 46.4,
+    "28": 54.8,
+    "29": 22.2,
+    "31": 26.3,
+    "32": 22.3,
+    "48": 34.4,
+    "49": 31.0,
+    "50": 22.0,
+    "18": 47.1,
+    "19": 45.4,
+    "20": 33.0,
+    "81": 74.7,
+    "82": 73.5,
+    "33": 27.5,
+    "34": 25.3,
+    "35": 19.1,
+    "42": 46.7,
+    "43": 56.7,
+    "44": 35.1,
+    "45": 53.2,
+    "46": 57.9,
+    "47": 48.5,
+    "39": 42.9,
+    "40": 52.4,
+    "41": 23.1,
+    "94": 24.1,
+    "95": 13.1,
+    "97": 19.6,
+    "51": 21.0,
+    "52": 29.1,
+    "53": 22.4,
+    "54": 52.1,
+    "55": 60.5,
+    "56": 37.7,
+    "84": 65.0,
+    "85": 62.5,
+    "86": 41.8,
+    "60": 24.5,
+    "61": 25.9,
+    "62": 18.7,
+    "63": 48.6,
+    "64": 48.0,
+    "65": 30.8,
+    "67": 21.4,
+    "68": 10.4,
+    "103": 21.1,
+    "104": 20.5,
+    "78": 62.1,
+    "79": 57.3,
+    "80": 30.4,
+    "69": 40.2,
+    "70": 56.8,
+    "71": 32.7,
+    "72": 51.7,
+    "73": 40.3,
+    "74": 14.4,
+    "107": 6.2,
+    "90": 52.0,
+    "91": 50.2
+  },
+  "status": {
+    "14": "u",
+    "18": "u",
+    "19": "u",
+    "54": "u",
+    "84": "u",
+    "61": "u",
+    "91": "u"
+  },
+  "id": [
+    "freq",
+    "frequenc",
+    "acl00",
+    "isced11",
+    "age",
+    "sex",
+    "unit",
+    "geo",
+    "time"
+  ],
+  "size": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    36,
+    3
+  ],
+  "dimension": {
+    "freq": {
+      "label": "Time frequency",
+      "category": {
+        "index": {
+          "A": 0
+        },
+        "label": {
+          "A": "Annual"
+        }
+      }
+    },
+    "frequenc": {
+      "label": "Frequency",
+      "category": {
+        "index": {
+          "GE1": 0
+        },
+        "label": {
+          "GE1": "At least once"
+        }
+      }
+    },
+    "acl00": {
+      "label": "Classification of activities for time use",
+      "category": {
+        "index": {
+          "AC522A": 0
+        },
+        "label": {
+          "AC522A": "Live performances (theatre, concerts, ballet)"
+        }
+      }
+    },
+    "isced11": {
+      "label": "International Standard Classification of Education (ISCED 2011)",
+      "category": {
+        "index": {
+          "TOTAL": 0
+        },
+        "label": {
+          "TOTAL": "All ISCED 2011 levels"
+        }
+      }
+    },
+    "age": {
+      "label": "Age class",
+      "category": {
+        "index": {
+          "Y_GE16": 0
+        },
+        "label": {
+          "Y_GE16": "16 years or over"
+        }
+      }
+    },
+    "sex": {
+      "label": "Sex",
+      "category": {
+        "index": {
+          "T": 0
+        },
+        "label": {
+          "T": "Total"
+        }
+      }
+    },
+    "unit": {
+      "label": "Unit of measure",
+      "category": {
+        "index": {
+          "PC": 0
+        },
+        "label": {
+          "PC": "Percentage"
+        }
+      }
+    },
+    "geo": {
+      "label": "Geopolitical entity (reporting)",
+      "category": {
+        "index": {
+          "BE": 0,
+          "BG": 1,
+          "CZ": 2,
+          "DK": 3,
+          "DE": 4,
+          "EE": 5,
+          "IE": 6,
+          "EL": 7,
+          "ES": 8,
+          "FR": 9,
+          "HR": 10,
+          "IT": 11,
+          "CY": 12,
+          "LV": 13,
+          "LT": 14,
+          "LU": 15,
+          "HU": 16,
+          "MT": 17,
+          "NL": 18,
+          "AT": 19,
+          "PL": 20,
+          "PT": 21,
+          "RO": 22,
+          "SI": 23,
+          "SK": 24,
+          "FI": 25,
+          "SE": 26,
+          "IS": 27,
+          "NO": 28,
+          "CH": 29,
+          "UK": 30,
+          "ME": 31,
+          "MK": 32,
+          "AL": 33,
+          "RS": 34,
+          "TR": 35
+        },
+        "label": {
+          "BE": "Belgium",
+          "BG": "Bulgaria",
+          "CZ": "Czechia",
+          "DK": "Denmark",
+          "DE": "Germany",
+          "EE": "Estonia",
+          "IE": "Ireland",
+          "EL": "Greece",
+          "ES": "Spain",
+          "FR": "France",
+          "HR": "Croatia",
+          "IT": "Italy",
+          "CY": "Cyprus",
+          "LV": "Latvia",
+          "LT": "Lithuania",
+          "LU": "Luxembourg",
+          "HU": "Hungary",
+          "MT": "Malta",
+          "NL": "Netherlands",
+          "AT": "Austria",
+          "PL": "Poland",
+          "PT": "Portugal",
+          "RO": "Romania",
+          "SI": "Slovenia",
+          "SK": "Slovakia",
+          "FI": "Finland",
+          "SE": "Sweden",
+          "IS": "Iceland",
+          "NO": "Norway",
+          "CH": "Switzerland",
+          "UK": "United Kingdom",
+          "ME": "Montenegro",
+          "MK": "North Macedonia",
+          "AL": "Albania",
+          "RS": "Serbia",
+          "TR": "Türkiye"
+        }
+      }
+    },
+    "time": {
+      "label": "Time",
+      "category": {
+        "index": {
+          "2006": 0,
+          "2015": 1,
+          "2022": 2
+        },
+        "label": {
+          "2006": "2006",
+          "2015": "2015",
+          "2022": "2022"
+        }
+      }
+    }
+  },
+  "extension": {
+    "lang": "EN",
+    "id": "ILC_SCP03",
+    "agencyId": "ESTAT",
+    "version": "1.0",
+    "datastructure": {
+      "id": "ILC_SCP03",
+      "agencyId": "ESTAT",
+      "version": "38.0"
+    },
+    "annotation": [
+      {
+        "type": "CREATED",
+        "date": "2017-06-27T15:14:06+0200"
+      },
+      {
+        "type": "DISSEMINATION_DOI_XML",
+        "title": "<adms:identifier xmlns:adms=\"http://www.w3.org/ns/adms#\" xmlns:skos=\"http://www.w3.org/2004/02/skos/core.html\" xmlns:dct=\"http://purl.org/dc/terms/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><adms:Identifier rdf:about=\"https://doi.org/10.2908/ILC_SCP03\"><skos:notation rdf:datatype=\"http://purl.org/spar/datacite/doi\">10.2908/ILC_SCP03</skos:notation><dct:creator rdf:resource=\"http://publications.europa.eu/resource/authority/corporate-body/ESTAT\"/><dct:issued rdf:datatype=\"http://www.w3.org/2001/XMLSchema#date\">2023-01-19</dct:issued></adms:Identifier></adms:identifier>"
+      },
+      {
+        "type": "DISSEMINATION_EXPLANATORY_LINK",
+        "title": "info-category",
+        "href": "https://ec.europa.eu/eurostat/databrowser-backend/api/public/explanatory-notes/get/Info_note_ILC_20251009.pdf",
+        "text": "Information note"
+      },
+      {
+        "type": "DISSEMINATION_EXPLANATORY_LINK",
+        "title": "info-category",
+        "href": "https://ec.europa.eu/eurostat/databrowser-backend/api/public/explanatory-notes/get/Info_note_ILC_20251009.pdf"
+      },
+      {
+        "type": "DISSEMINATION_EXPLANATORY_LINK",
+        "title": "info-category",
+        "href": "https://ec.europa.eu/eurostat/databrowser-backend/api/public/explanatory-notes/get/Info_note_ILC_20251009.pdf"
+      },
+      {
+        "type": "DISSEMINATION_OBJECT_TYPE",
+        "title": "DATASET"
+      },
+      {
+        "type": "DISSEMINATION_TIMESTAMP_DATA",
+        "date": "2026-04-24T23:00:00+0200"
+      },
+      {
+        "type": "DISSEMINATION_TIMESTAMP_GLOBAL",
+        "date": "2026-04-24T23:00:00+0200"
+      },
+      {
+        "type": "DISSEMINATION_TIMESTAMP_PLANNED",
+        "date": "2026-04-24T23:00:00+0200"
+      },
+      {
+        "type": "ESMS_HTML",
+        "title": "Explanatory texts (metadata)",
+        "href": "https://ec.europa.eu/eurostat/cache/metadata/en/ilc_sieusilc.htm"
+      },
+      {
+        "type": "ESMS_SDMX",
+        "title": "Explanatory texts (metadata)",
+        "href": "https://ec.europa.eu/eurostat/api/dissemination/files?file=metadata/ilc_sieusilc.sdmx.zip"
+      },
+      {
+        "type": "OBS_COUNT",
+        "title": "377298"
+      },
+      {
+        "type": "OBS_PERIOD_OVERALL_LATEST",
+        "title": "2022"
+      },
+      {
+        "type": "OBS_PERIOD_OVERALL_OLDEST",
+        "title": "2006"
+      },
+      {
+        "type": "SOURCE_INSTITUTIONS",
+        "text": "Eurostat"
+      },
+      {
+        "type": "UPDATE_DATA",
+        "date": "2026-04-24T23:00:00+0200"
+      },
+      {
+        "type": "UPDATE_STRUCTURE",
+        "date": "2025-10-02T23:00:00+0200"
+      }
+    ],
+    "status": {
+      "label": {
+        "u": "low reliability"
+      }
+    },
+    "positions-with-no-data": {
+      "freq": [],
+      "frequenc": [],
+      "acl00": [],
+      "isced11": [],
+      "age": [],
+      "sex": [],
+      "unit": [],
+      "geo": [],
+      "time": []
+    }
+  }
+}

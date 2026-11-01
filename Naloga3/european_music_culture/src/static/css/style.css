@@ -1,0 +1,200 @@
+
+:root {
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    color: #202b3c;
+    background: #f4f6fa;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+.site-header {
+    background: #172a46;
+    color: white;
+    padding: 48px 24px;
+}
+
+.header-content,
+.container {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    color: #5678b8;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.site-header .eyebrow {
+    color: #a9c5ff;
+}
+
+h1,
+h2,
+p {
+    margin-top: 0;
+}
+
+h1 {
+    margin-bottom: 12px;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    letter-spacing: -0.04em;
+}
+
+.subtitle {
+    max-width: 650px;
+    margin-bottom: 0;
+    color: #d5deed;
+    line-height: 1.6;
+}
+
+.container {
+    padding: 28px 20px;
+}
+
+.intro {
+    margin-bottom: 24px;
+    line-height: 1.7;
+}
+
+.intro h2 {
+    margin-bottom: 8px;
+}
+
+.data-note,
+small {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.panel {
+    margin-bottom: 24px;
+    padding: 24px;
+    background: white;
+    border: 1px solid #e0e6ef;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgb(20 40 70 / 4%);
+}
+
+.panel-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.panel-heading h2 {
+    margin-bottom: 8px;
+}
+
+.panel-heading p:not(.eyebrow) {
+    color: #64748b;
+    line-height: 1.5;
+}
+
+.control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 120px;
+}
+
+label {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+select,
+button {
+    font: inherit;
+}
+
+select {
+    padding: 10px 12px;
+    color: #202b3c;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+}
+
+select:focus,
+button:focus-visible {
+    outline: 3px solid #a9c5ff;
+    outline-offset: 2px;
+}
+
+.comparison-controls {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.country-control {
+    width: min(100%, 340px);
+}
+
+#comparison-countries {
+    width: 100%;
+}
+
+button {
+    padding: 11px 18px;
+    color: white;
+    background: #2455a4;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #193f7e;
+}
+
+.status {
+    min-height: 1.2em;
+    margin: 12px 0 0;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.chart {
+    width: 100%;
+    min-height: 360px;
+}
+
+footer {
+    padding: 12px 0;
+    color: #64748b;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 650px) {
+    .site-header {
+        padding: 36px 20px;
+    }
+
+    .panel {
+        padding: 18px 14px;
+    }
+
+    .panel-heading {
+        flex-direction: column;
+    }
+
+    .chart {
+        min-height: 300px;
+    }
+}
