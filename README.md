@@ -1,115 +1,198 @@
 # Spotify Sound Companion
 
-A lightweight Python application that connects to your active Spotify session to fetch real-time playback stats, track info, and song lyrics. Designed as a modular service integration project with upcoming web dashboard and AI enhancement features.
+A Python desktop application that monitors Spotify playback and displays information about the currently playing track.
 
----
+The application uses the Spotify Web API to retrieve track information, detects playback changes, and provides a direct lyrics search link.
 
 ## Features
 
-* **Real-time Track Polling:** Automatically detects the track currently playing on your Spotify account.
-* **Lyrics Synchronization:** Fetches matching song lyrics using the `Lyrics.ovh` REST API.
-* **Track Metadata:** Displays album artwork URLs, artist names, album titles, and playback progress.
-* **OAuth 2.0 Integration:** Secure authentication using Spotify's official OAuth flow with `user-read-currently-playing` scope.
+### Implemented
 
----
+- Spotify authentication using OAuth 2.0.
+- Retrieval of the currently playing track.
+- Track metadata:
+  - Track title
+  - Artist
+  - Album
+  - Playback progress
+  - Track duration
+- Album artwork URL retrieval.
+- Lyrics search link generation through Genius.
+- Continuous playback monitoring.
+- Automatic detection of track changes.
+- Pause and resume detection.
+- Handling of missing playback information.
+- Spotify API error handling, including rate limits.
+- Automated tests for playback monitoring, duration formatting, and error handling.
 
-## Tech Stack
+### Planned
 
-* **Language:** Python 3.9+
-* **APIs & Services:**
-  * [Spotify Web API](https://developer.spotify.com/documentation/web-api) (via `spotipy`)
-  * [Lyrics.ovh API](https://lyricsovh.docs.apiary.io/)
-* **Dependencies:** `requests`, `spotipy`, `python-dotenv`
+- AI-generated facts about songs and artists.
+- Improved terminal presentation.
+- Additional music metadata and contextual information.
 
----
+## Technologies
 
-## Data Specifications
+- Python
+- Spotipy
+- Spotify Web API
+- Requests
+- Python-dotenv
+- Genius search
 
-Data transferred over REST APIs using JSON over HTTPS.
+## Requirements
 
-### 1. Spotify Currently Playing Payload
-* **Endpoint:** `GET /v1/me/player/currently-playing`
-* **Data Types & Fields:**
-  * `is_playing`: `boolean` (current status)
-  * `item.name`: `string` (track title)
-  * `item.artists[].name`: `string` (artist names)
-  * `item.album.images[].url`: `string` (HTTPS URL to cover image)
-  * `item.duration_ms`: `integer` (track duration)
+- Python 3.10 or newer.
+- A Spotify account.
+- A Spotify Developer application configured for Development Mode.
+- An active Premium subscription on the Spotify application owner's account.
 
-### 2. Lyrics API Payload
-* **Endpoint:** `GET /v1/{artist}/{title}`
-* **Data Types & Fields:**
-  * `lyrics`: `string` (raw lyrics with newline characters)
+## Installation
 
----
-
-## Service Documentation
-
-1. **Spotify Web API**
-   * **Description:** Provides metadata for tracks, currently playing media, user library data, and playlist control.
-   * **Auth:** OAuth 2.0 (Authorization Code Flow)
-   * **Docs:** https://developer.spotify.com/documentation/web-api
-
-2. **Lyrics.ovh API**
-   * **Description:** Free public REST service for retrieving song text by artist and track title.
-   * **Auth:** None (Public API)
-   * **Docs:** https://lyricsovh.docs.apiary.io/
-
----
-
-## Project Roadmap (Upcoming Features)
-
-The project is designed to expand across three major development milestones:
-
-- [ ] **🎛️ Live Web Dashboard**
-  - Web UI built with **FastAPI / Flask** and **Tailwind CSS**.
-  - Auto-refreshing player card with dynamic album artwork, progress bar, and synced scrolling lyrics.
-- [ ] **🤖 AI Track Trivia**
-  - Integration with an LLM API (Gemini / OpenAI) to generate real-time trivia, song origin stories, and fun facts about the current artist.
-- [ ] **➕ Playlist Curation**
-  - Quick action controls to instantly save the currently playing track to a designated "Favorites" or "Discovery" Spotify playlist.
-
----
-
-## Setup & Installation
-
-### 1. Prerequisites
-* Python 3.9 or higher.
-* A Spotify account (free or Premium).
-* A registered application on the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
-
-### 2. Spotify API Keys Setup
-1. Log into the Spotify Developer Dashboard and create a new app.
-2. Note down your **Client ID** and **Client Secret**.
-3. In your app settings, set the Redirect URI to `http://127.0.0.1:8888/callback`.
-
-### 3. Repository Setup
-Clone the repository and install the required dependencies:
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/spotify-sound-companion.git
-cd spotify-sound-companion
+git clone https://github.com/JovanObr/Spotify-Spremljevalec---Pridobivalnik-besedil-v-ivo.git
+cd Spotify-Spremljevalec---Pridobivalnik-besedil-v-ivo
+```
+
+### 2. Create a virtual environment
+
+Windows PowerShell:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+If PowerShell prevents activation:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+Then activate the environment again.
+
+### 3. Install dependencies
+
+```bash
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Environment Configuration
-Create a `.env` file in the root directory and add your credentials:
+## Spotify configuration
+
+### 1. Create a Spotify Developer application
+
+Visit:
+
+https://developer.spotify.com/dashboard
+
+Create an application and configure:
+
+- API: Web API
+- Redirect URI: `http://127.0.0.1:8888/callback`
+
+### 2. Configure authorized users
+
+In the application's settings, open User Management and add the Spotify account that will authenticate with the application.
+
+Development Mode applications have restrictions on authorized users and require an eligible Premium subscription for the application owner.
+
+### 3. Configure environment variables
+
+Create a `.env` file in the repository root:
 
 ```env
-SPOTIPY_CLIENT_ID="your_spotify_client_id"
-SPOTIPY_CLIENT_SECRET="your_spotify_client_secret"
+SPOTIPY_CLIENT_ID="your_client_id"
+SPOTIPY_CLIENT_SECRET="your_client_secret"
 SPOTIPY_REDIRECT_URI="http://127.0.0.1:8888/callback"
 ```
 
----
+Replace the placeholder values with your Spotify application's credentials.
 
-## Usage
+**Never commit your `.env` file or share your Client Secret.**
 
-Run the main script to start listening for active Spotify playback:
+## Running the application
+
+Activate the virtual environment and execute:
 
 ```bash
 python main.py
 ```
 
-On first run, a browser window will open asking you to log into Spotify and authorize the app. Once authorized, the terminal will print details and lyrics for whatever track is currently playing.
+On the first run, Spotify OAuth authentication will open in your browser.
 
+After authorization, the application will begin monitoring playback.
+
+The default polling interval is five seconds.
+
+Press `Ctrl+C` to stop the application.
+
+## Running tests
+
+Execute the automated test suite:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The tests cover:
+
+- Playback monitoring and track changes.
+- Pause and resume transitions.
+- Missing playback information.
+- Duration formatting.
+- Spotify API error handling and rate limits.
+
+The lyrics service can also be tested separately:
+
+```bash
+python -m tests.test_lyrics_service
+```
+
+## Project structure
+
+```text
+Spotify-Sound-Companion/
+│
+├── main.py
+├── requirements.txt
+├── .env
+├── .env.example
+├── .gitignore
+├── README.md
+│
+├── core/
+│   ├── __init__.py
+│   └── config.py
+│
+├── services/
+│   ├── __init__.py
+│   ├── spotify_service.py
+│   └── lyrics_service.py
+│
+├── utils/
+│   ├── __init__.py
+│   ├── display.py
+│   └── spotify_errors.py
+│
+└── tests/
+    ├── test_lyrics_service.py
+    ├── test_playback_monitor.py
+    ├── test_display.py
+    └── test_spotify_errors.py
+```
+
+## Limitations
+
+- The application requires an internet connection.
+- Spotify API access depends on the application's Development Mode eligibility and account authorization.
+- Lyrics are accessed through an external Genius search link; the application does not retrieve or display full lyrics.
+- Album artwork is currently displayed as a URL rather than an inline image.
+- AI-generated music facts are planned but are not yet implemented.
+- Playback monitoring relies on periodic polling, so changes may take several seconds to appear.
+
+## License
+
+Add the project's chosen license here if you intend to distribute the application.
