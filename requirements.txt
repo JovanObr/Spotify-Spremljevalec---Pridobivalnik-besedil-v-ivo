@@ -1,5 +1,8 @@
-
-spotipy
-requests
-python-dotenv
-google-genai
+spotipy>=2.26  # 2.26+ uses the endpoints Spotify switched to in Feb 2026
+requests>=2.32
+python-dotenv>=1.0
+google-genai>=2.30
+pydantic>=2.7
+fastapi>=0.115
+uvicorn>=0.30
+httpx>=0.27  # used by FastAPI's TestClient in the tests

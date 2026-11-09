@@ -1,4 +1,4 @@
-from services.lyrics_service import get_lyrics_search_url
+from models.track import Playback
 
 
 def format_duration(milliseconds: int | None) -> str:
@@ -18,47 +18,28 @@ def format_duration(milliseconds: int | None) -> str:
     return f"{minutes:02d}:{seconds:02d}"
 
 
-def display_track(track: dict, playback: dict) -> None:
+def display_track(playback: Playback) -> None:
     """Display information about the currently playing track."""
 
-    artists = ", ".join(
-        artist["name"] for artist in track.get("artists", [])
-    )
+    track = playback.track
 
-    title = track.get("name", "Unknown")
-    album_data = track.get("album", {})
-    album = album_data.get("name", "Unknown")
-
-    progress = format_duration(playback.get("progress_ms"))
-    duration = format_duration(track.get("duration_ms"))
-
-    images = album_data.get("images", [])
-    artwork_url = images[0].get("url") if images else None
+    progress = format_duration(playback.progress_ms)
+    duration = format_duration(track.duration_ms)
 
     print("\n" + "=" * 55)
     print("                 CURRENTLY PLAYING")
     print("=" * 55)
 
-    print(f"Title:    {title}")
-    print(f"Artist:   {artists}")
-    print(f"Album:    {album}")
+    print(f"Title:    {track.title}")
+    print(f"Artist:   {track.artist}")
+    print(f"Album:    {track.album}")
     print(f"Progress: {progress} / {duration}")
 
     print("\nAlbum Artwork")
     print("-" * 55)
 
-    if artwork_url:
-        print(artwork_url)
-    else:
-        print("No album artwork available.")
+    print(track.artwork_url or "No album artwork available.")
 
-    print("\nLyrics")
-    print("-" * 55)
-
-    try:
-        lyrics_url = get_lyrics_search_url(artists, title)
-        print(lyrics_url)
-    except ValueError as error:
-        print(f"Could not generate lyrics link: {error}")
+    print("\nLyrics: open the web interface (python -m api) for live lyrics.")
 
     print("=" * 55)
