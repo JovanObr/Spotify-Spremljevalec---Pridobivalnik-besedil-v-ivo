@@ -48,12 +48,35 @@ class TestApi(unittest.TestCase):
     # --- status / auth -----------------------------------------------------
 
     def test_status(self):
-        with patch("services.ai_service.is_configured", return_value=False):
+        with patch("services.ai_service.is_configured", return_value=False), \
+             patch("services.musicatlas_service.is_configured", return_value=True):
             response = self.client.get("/api/status")
 
-        self.assertEqual(
-            response.json(), {"authenticated": True, "ai_enabled": False}
-        )
+        self.assertEqual(response.json(), {
+            "authenticated": True, "ai_enabled": False, "recommendations_enabled": True,
+        })
+
+    def test_token_for_web_playback(self):
+        self.state.auth_manager.validate_token.return_value = {
+            "access_token": "abc", "expires_at": 123, "scope": "streaming user-read-email",
+        }
+
+        response = self.client.get("/api/token")
+
+        self.assertEqual(response.json(), {"access_token": "abc", "expires_at": 123})
+        self.assertEqual(response.headers["cache-control"], "no-store")
+
+    def test_token_without_streaming_scope(self):
+        self.state.auth_manager.validate_token.return_value = {
+            "access_token": "abc", "expires_at": 123, "scope": "user-read-email",
+        }
+
+        self.assertEqual(self.client.get("/api/token").status_code, 403)
+
+    def test_token_when_logged_out(self):
+        self.state.auth_manager.validate_token.return_value = None
+
+        self.assertEqual(self.client.get("/api/token").status_code, 401)
 
     def test_login_redirects_to_spotify_with_safe_state(self):
         self.state.auth_manager.get_authorize_url.return_value = (
@@ -280,7 +303,7 @@ class TestApi(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         mock_play.assert_called_once_with(
-            self.state.client, "spotify:playlist:a", "spotify:track:t1"
+            self.state.client, "spotify:playlist:a", "spotify:track:t1", None
         )
 
     @patch("services.spotify_service.control_playback")
@@ -300,9 +323,11 @@ class TestApi(unittest.TestCase):
     @patch("services.recommendation_service.get_recommendations")
     def test_recommendations(self, mock_recs):
         from models.track import Track
-        from services.recommendation_service import Recommendation
+        from services.recommendation_service import Recommendation, RecommendationResult
         track = Track.from_spotify({**SPOTIFY_RESPONSE["item"], "uri": "spotify:track:x"})
-        mock_recs.return_value = [Recommendation(track, "Same mood.")]
+        mock_recs.return_value = RecommendationResult(
+            [Recommendation(track, "Same mood.")], "musicatlas", ("dreampop",)
+        )
 
         data = self.client.get("/api/recommendations", params={
             "artist": "A", "title": "B", "track_uri": "spotify:track:cur",
@@ -310,6 +335,8 @@ class TestApi(unittest.TestCase):
 
         self.assertEqual(data["items"][0]["reason"], "Same mood.")
         self.assertEqual(data["items"][0]["track"]["uri"], "spotify:track:x")
+        self.assertEqual(data["source"], "musicatlas")
+        self.assertEqual(data["tags"], ["dreampop"])
         mock_recs.assert_called_once_with(
             self.state.client, "A", "B", None, "spotify:track:cur"
         )
@@ -357,7 +384,16 @@ class TestApi(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        mock_play.assert_called_once_with(self.state.client, "spotify:track:x")
+        mock_play.assert_called_once_with(self.state.client, "spotify:track:x", None)
+
+    @patch("services.spotify_service.play_track")
+    def test_play_on_a_chosen_device(self, mock_play):
+        response = self.client.post(
+            "/api/player/play", json={"track_uri": "spotify:track:x", "device_id": "web1"}
+        )
+
+        self.assertEqual(response.status_code, 200)
+        mock_play.assert_called_once_with(self.state.client, "spotify:track:x", "web1")
 
     def test_play_needs_exactly_one_target(self):
         both = self.client.post("/api/player/play", json={
@@ -440,7 +476,7 @@ class TestApi(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         mock_play.assert_called_once_with(
-            self.state.client, ["spotify:track:a", "spotify:track:b"], "spotify:track:b"
+            self.state.client, ["spotify:track:a", "spotify:track:b"], "spotify:track:b", None
         )
 
     def test_play_track_list_rejects_other_uris(self):

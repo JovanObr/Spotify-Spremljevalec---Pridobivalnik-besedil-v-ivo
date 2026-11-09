@@ -6,18 +6,19 @@ import { usePlayback } from "../playback/PlaybackProvider";
 
 interface Props {
   track: Track;
-  aiEnabled: boolean;
+  /** MusicAtlas or the AI is configured. */
+  enabled: boolean;
 }
 
-/** "If you like this": three songs picked by Gemini and verified on Spotify. */
-export function RecommendationsPanel({ track, aiEnabled }: Props) {
+/** "If you like this": three songs (MusicAtlas, or AI checked on Spotify). */
+export function RecommendationsPanel({ track, enabled }: Props) {
   const { data, isPending, isError, error, refetch, isFetching } = useRecommendations(
     track,
-    aiEnabled,
+    enabled,
   );
 
-  // Without an API key the facts panel already explains how to enable AI
-  if (!aiEnabled) return null;
+  // Nothing configured: the facts panel already explains how to enable AI
+  if (!enabled) return null;
 
   return (
     <section aria-labelledby="recs-heading" className="border-t border-line pt-5">
@@ -58,19 +59,30 @@ export function RecommendationsPanel({ track, aiEnabled }: Props) {
             {strings.recommendations.retry}
           </button>
         </div>
-      ) : data.length === 0 ? (
+      ) : data.items.length === 0 ? (
         <p className="mt-2 text-sm text-ink-faint">{strings.recommendations.empty}</p>
       ) : (
         <>
+          {data.tags.length > 0 && (
+            <p className="mt-1.5 text-sm text-ink-faint">
+              {data.tags.slice(0, 4).map((tag) => `#${tag}`).join("  ")}
+            </p>
+          )}
           <ul className="mt-2 -mx-2">
-            {data.map((recommendation) => (
+            {data.items.map((recommendation) => (
               <RecommendationRow
                 key={recommendation.track.uri ?? recommendation.track.title}
                 recommendation={recommendation}
               />
             ))}
           </ul>
-          <p className="mt-2 text-xs text-ink-faint">{strings.recommendations.disclaimer}</p>
+          <p className="mt-2 text-xs text-ink-faint">
+            {data.source === "ai"
+              ? strings.recommendations.disclaimer.ai
+              : data.items.some((item) => item.reason)
+                ? strings.recommendations.disclaimer.musicatlas
+                : strings.recommendations.disclaimer.musicatlasNoReasons}
+          </p>
         </>
       )}
     </section>
@@ -93,7 +105,7 @@ function RecommendationRow({ recommendation }: { recommendation: Recommendation 
       <div className="min-w-0 flex-1">
         <p className="truncate text-[0.95rem] font-[600] text-ink">{track.title}</p>
         <p className="truncate text-sm text-ink-soft">{track.artist}</p>
-        <p className="mt-1 text-sm leading-snug text-ink-faint">{reason}</p>
+        {reason && <p className="mt-1 text-sm leading-snug text-ink-faint">{reason}</p>}
       </div>
 
       {uri && (

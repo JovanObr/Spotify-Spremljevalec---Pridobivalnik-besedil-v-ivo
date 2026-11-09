@@ -77,7 +77,11 @@ streaming, user-read-email, user-read-private   Web Playback SDK (Phase 5)
 
 ---
 
-## Phase 3: Smart recommendations (Gemini) ✅ Done
+## Phase 3: Smart recommendations ✅ Done
+
+**Update: MusicAtlas first, Gemma as fallback.** With `MUSICATLAS_API_KEY` set, `POST https://musicatlas.ai/api/similar_tracks` returns songs that *sound* similar (audio analysis), each with its Spotify ID, plus style hashtags for the current song. The app takes one song per artist, checks up to six on Spotify (playable in your market), keeps three, and asks Gemma for a one-line reason for each (MusicAtlas doesn't give one). If the song isn't in MusicAtlas's catalogue, the quota is used up or the key is wrong, the Gemma flow below runs instead. The response says which source was used, and the panel's note changes with it.
+
+The original Gemma flow:
 
 "If you like this song, you'll probably like these 3."
 
@@ -114,7 +118,7 @@ Each of these is small, but together they're what makes this usable instead of S
 
 ---
 
-## Phase 5: Play in the browser
+## Phase 5: Play in the browser ✅ Done
 
 This is the step that makes it a real replacement. Today the app is a **remote control**: Spotify has to be running somewhere else. With the **Spotify Web Playback SDK**, the browser tab itself becomes a Spotify device, so nothing else needs to be open.
 
@@ -124,12 +128,20 @@ This is the step that makes it a real replacement. Today the app is a **remote c
 - Requires Premium, and the browser must support DRM (Widevine): Chrome, Edge and Firefox do.
 - Verify the SDK's current status against Spotify's docs before starting this phase.
 
+**How it was built**
+- `GET /api/token` returns the cached token (Spotipy refreshes it) with `Cache-Control: no-store`, and refuses tokens without the `streaming` scope.
+- `playback/spotifySdk.ts` loads `sdk.scdn.co/spotify-player.js` once; `WebPlayerProvider` creates the player, tracks its device ID and turns SDK errors into plain messages (Premium needed, browser unsupported, log in again).
+- The device picker lists "Sound Companion" as *This browser* even before Spotify's device list catches up. When nothing is playing anywhere, play commands send `device_id` so music starts in the tab. Every play/transfer into the tab calls `activateElement()` during the click, which browsers require before a tab may play sound.
+- Changes in the tab refresh Now Playing immediately instead of waiting for the next poll.
+- `MediaSession` sets the title, artist, album art, position and play/pause/next/previous/seek handlers.
+
 ---
 
-## Phase 6: More AI
+## Phase 6: More AI ✅ Done
 
-- **Translate lyrics:** show a line-by-line translation (e.g. Slovenian) under the synced lyrics.
-- **What's this song about:** a short Gemini explanation of the lyrics' meaning, shown on demand.
+- **Translate lyrics:** a Translate button above the lyrics shows a line-by-line translation under each line (synced or plain). The language picker and on/off state are remembered in the browser. Only distinct lines are sent, numbered, to the fast facts model (`GEMINI_FACTS_MODEL`), and the answer is mapped back by number, so choruses cost nothing extra and lines can't shift. Cached per song and language. Lines the model repeats unchanged (e.g. "oh, oh") aren't shown twice.
+- **What's this song about:** a button in the side panel, so it only uses quota when asked. The lyrics (up to 6,000 characters) are sent as context with an instruction to paraphrase, never quote; the recommendations model (Gemma) writes 3 to 5 sentences and up to four themes. If no lyrics are found, it says the explanation is from general knowledge.
+- Endpoints: `GET /api/lyrics/translation` and `GET /api/meaning`.
 
 ---
 

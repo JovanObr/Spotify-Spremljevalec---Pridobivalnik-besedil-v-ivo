@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from requests.exceptions import RequestException
 from spotipy.exceptions import SpotifyException
 
-from api.errors import spotify_http_error
+from api.errors import ai_http_error, spotify_http_error
 from api.state import SpotifyState, get_spotify_state, require_login
 from services import ai_service, recommendation_service
 
@@ -26,15 +26,9 @@ def facts(
     except ValueError as error:
         raise HTTPException(422, str(error)) from error
     except ai_service.AIServiceError as error:
-        raise _ai_http_error(error) from error
+        raise ai_http_error(error) from error
 
     return {"facts": items}
-
-
-def _ai_http_error(error: ai_service.AIServiceError) -> HTTPException:
-    if isinstance(error, ai_service.AINotConfiguredError):
-        return HTTPException(503, str(error))
-    return HTTPException(429 if error.status_code == 429 else 502, str(error))
 
 
 @router.get("/recommendations")
@@ -56,10 +50,10 @@ def recommendations(
     except ValueError as error:
         raise HTTPException(422, str(error)) from error
     except ai_service.AIServiceError as error:
-        raise _ai_http_error(error) from error
+        raise ai_http_error(error) from error
     except SpotifyException as error:
         raise spotify_http_error(error) from error
     except RequestException as error:
         raise HTTPException(503, f"Network error: {error}") from error
 
-    return {"items": [item.to_dict() for item in items]}
+    return items.to_dict()

@@ -13,10 +13,10 @@ export type PlayerCommand =
       progressMs: number;
     }
   | { action: "seek"; positionMs: number }
-  | { action: "playContext"; contextUri: string; offsetUri?: string | null }
-  | { action: "playTrack"; uri: string }
+  | { action: "playContext"; contextUri: string; offsetUri?: string | null; deviceId?: string | null }
+  | { action: "playTrack"; uri: string; deviceId?: string | null }
   | { action: "queue"; uri: string; title: string }
-  | { action: "playTracks"; uris: string[]; offsetUri?: string | null }
+  | { action: "playTracks"; uris: string[]; offsetUri?: string | null; deviceId?: string | null }
   | { action: "shuffle"; state: boolean }
   | { action: "repeat"; mode: RepeatMode }
   | { action: "volume"; percent: number }
@@ -37,13 +37,13 @@ export function usePlayerControls({ onError, onSuccess }: Callbacks) {
         case "seek":
           return api.seek(command.positionMs);
         case "playContext":
-          return api.playContext(command.contextUri, command.offsetUri);
+          return api.playContext(command.contextUri, command.offsetUri, command.deviceId);
         case "playTrack":
-          return api.playTrack(command.uri);
+          return api.playTrack(command.uri, command.deviceId);
         case "queue":
           return api.addToQueue(command.uri);
         case "playTracks":
-          return api.playTracks(command.uris, command.offsetUri);
+          return api.playTracks(command.uris, command.offsetUri, command.deviceId);
         case "shuffle":
           return api.shuffle(command.state);
         case "repeat":

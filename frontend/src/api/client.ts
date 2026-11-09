@@ -1,6 +1,8 @@
 import type {
   FactsResponse,
   LyricsResponse,
+  MeaningResponse,
+  TranslationResponse,
   NowPlayingResponse,
   Device,
   PlayerAction,
@@ -10,7 +12,7 @@ import type {
   PlaylistDetail,
   PlaylistItemsPage,
   PlaylistSummary,
-  Recommendation,
+  RecommendationsResponse,
   StatusResponse,
   Track,
 } from "./types";
@@ -81,6 +83,18 @@ export const api = {
     return request<LyricsResponse>(`/api/lyrics?${params}`);
   },
 
+  translation: (track: Track, language: string) => {
+    const params = trackQuery(track, { language });
+    if (track.duration_ms) params.set("duration_ms", String(track.duration_ms));
+    return request<TranslationResponse>(`/api/lyrics/translation?${params}`);
+  },
+
+  meaning: (track: Track, language: string) => {
+    const params = trackQuery(track, { language });
+    if (track.duration_ms) params.set("duration_ms", String(track.duration_ms));
+    return request<MeaningResponse>(`/api/meaning?${params}`);
+  },
+
   facts: (track: Track, language: string) =>
     request<FactsResponse>(`/api/facts?${trackQuery(track, { language })}`),
 
@@ -88,20 +102,20 @@ export const api = {
     request<{ ok: boolean }>(`/api/player/${action}`, { method: "POST" }),
 
   /** Start a playlist or album, optionally from a specific track. */
-  playContext: (contextUri: string, offsetUri?: string | null) =>
-    request<{ ok: boolean }>("/api/player/play", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ context_uri: contextUri, offset_uri: offsetUri ?? null }),
+  /** deviceId: where to play when nothing is active (e.g. this browser). */
+  playContext: (contextUri: string, offsetUri?: string | null, deviceId?: string | null) =>
+    post<{ ok: boolean }>("/api/player/play", {
+      context_uri: contextUri,
+      offset_uri: offsetUri ?? null,
+      device_id: deviceId ?? null,
     }),
 
   /** Play one song now. */
-  playTrack: (trackUri: string) =>
-    request<{ ok: boolean }>("/api/player/play", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ track_uri: trackUri }),
-    }),
+  playTrack: (trackUri: string, deviceId?: string | null) =>
+    post<{ ok: boolean }>("/api/player/play", { track_uri: trackUri, device_id: deviceId ?? null }),
+
+  /** Short-lived token for the Web Playback SDK (playing in this browser). */
+  token: () => request<{ access_token: string; expires_at: number | null }>("/api/token"),
 
   addToQueue: (trackUri: string) =>
     request<{ ok: boolean }>("/api/player/queue", {
@@ -113,14 +127,15 @@ export const api = {
   recommendations: (track: Track) => {
     const params = trackQuery(track);
     if (track.uri) params.set("track_uri", track.uri);
-    return request<{ items: Recommendation[] }>(`/api/recommendations?${params}`);
+    return request<RecommendationsResponse>(`/api/recommendations?${params}`);
   },
 
   /** Play a list of songs (max 100), optionally starting at one. */
-  playTracks: (trackUris: string[], offsetUri?: string | null) =>
+  playTracks: (trackUris: string[], offsetUri?: string | null, deviceId?: string | null) =>
     post<{ ok: boolean }>("/api/player/play", {
       track_uris: trackUris.slice(0, 100),
       offset_uri: offsetUri ?? null,
+      device_id: deviceId ?? null,
     }),
 
   queue: () => request<QueueResponse>("/api/queue"),

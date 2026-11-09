@@ -108,19 +108,23 @@ def play_context(
     spotify: spotipy.Spotify,
     context_uri: str,
     offset_uri: str | None = None,
+    device_id: str | None = None,
 ) -> None:
     """Start a playlist or album, optionally from a specific track."""
 
     spotify.start_playback(
+        device_id=device_id,
         context_uri=context_uri,
         offset={"uri": offset_uri} if offset_uri else None,
     )
 
 
-def play_track(spotify: spotipy.Spotify, track_uri: str) -> None:
+def play_track(
+    spotify: spotipy.Spotify, track_uri: str, device_id: str | None = None
+) -> None:
     """Play a single song now."""
 
-    spotify.start_playback(uris=[track_uri])
+    spotify.start_playback(device_id=device_id, uris=[track_uri])
 
 
 def add_to_queue(spotify: spotipy.Spotify, track_uri: str) -> None:
@@ -136,10 +140,12 @@ def play_tracks(
     spotify: spotipy.Spotify,
     track_uris: list[str],
     offset_uri: str | None = None,
+    device_id: str | None = None,
 ) -> None:
     """Play a list of songs (e.g. liked songs), optionally starting at one."""
 
     spotify.start_playback(
+        device_id=device_id,
         uris=track_uris[:MAX_TRACK_URIS],
         offset={"uri": offset_uri} if offset_uri else None,
     )

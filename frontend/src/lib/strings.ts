@@ -19,6 +19,9 @@ export const strings = {
   idle: {
     title: "Nothing playing on Spotify",
     body: "Start a song in any Spotify app and it appears here within a few seconds.",
+    bodyWithBrowser:
+      "Start a song in any Spotify app, or pick one here and it plays right in this browser.",
+    searchLink: "Find something to play",
   },
 
   nav: {
@@ -88,6 +91,28 @@ export const strings = {
     source: (source: string) => `Lyrics from ${source}`,
   },
 
+  translation: {
+    show: "Translate",
+    hide: "Hide translation",
+    language: "Translation language",
+    loading: (language: string) => `Translating into ${language}…`,
+    error: "The translation couldn't be made right now.",
+    rateLimited: "The AI's free quota is used up for now. Try again later.",
+    retry: "Try again",
+    disclaimer: (language: string) => `${language} translation by AI. It can make mistakes.`,
+  },
+
+  meaning: {
+    heading: "What's this song about",
+    ask: "Explain this song",
+    loading: "Reading between the lines…",
+    error: "The explanation couldn't be written right now.",
+    rateLimited: "The AI's free quota is used up for now. Try again later.",
+    retry: "Try again",
+    fromLyrics: "Based on the lyrics. Written by AI, so treat it as one reading.",
+    withoutLyrics: "No lyrics were found, so this is from what the AI knows about the song.",
+  },
+
   facts: {
     heading: "About this song",
     loading: "Asking Gemini…",
@@ -107,7 +132,11 @@ export const strings = {
     retry: "Try again",
     playNow: (title: string) => `Play ${title} now`,
     addToQueue: (title: string) => `Add ${title} to queue`,
-    disclaimer: "Picked by Gemini and checked on Spotify.",
+    disclaimer: {
+      musicatlas: "Picked by MusicAtlas audio analysis. Reasons written by AI.",
+      musicatlasNoReasons: "Picked by MusicAtlas audio analysis.",
+      ai: "Picked by AI and checked on Spotify.",
+    },
   },
 
   like: {
@@ -141,6 +170,15 @@ export const strings = {
     none: "No devices found. Open Spotify on your phone, computer or speaker.",
     error: "Devices couldn't be loaded.",
     switched: (name: string) => `Playing on ${name}`,
+    thisBrowser: "This browser",
+    playHere: "Play here",
+    webPlayer: {
+      connecting: "Getting this browser ready to play…",
+      unsupported: "This browser can't play Spotify. Use desktop Chrome, Edge or Firefox.",
+      premium: "Playing in the browser needs Spotify Premium.",
+      auth: "Log out and connect Spotify again to play in this browser.",
+      unavailable: "This browser can't play Spotify right now.",
+    },
     volume: "Volume",
   },
 

@@ -3,7 +3,9 @@ import { createPortal } from "react-dom";
 
 import { useDevices } from "../hooks/queries";
 import { strings } from "../lib/strings";
+import type { Device } from "../api/types";
 import { usePlayback } from "../playback/PlaybackProvider";
+import { useWebPlayer } from "../playback/WebPlayerProvider";
 import { DevicesIcon } from "./icons";
 
 const PANEL_WIDTH = 288;
@@ -20,7 +22,30 @@ interface Props {
 export function DevicePicker({ placement = "below", showName = true }: Props) {
   const [open, setOpen] = useState(false);
   const { playback, transferTo, isBusy } = usePlayback();
-  const { data: devices, isPending, isError } = useDevices(open);
+  const { data: apiDevices, isPending, isError } = useDevices(open);
+  const webPlayer = useWebPlayer();
+
+  // This tab's player can take a moment to appear in Spotify's device list
+  const devices: Device[] | undefined =
+    apiDevices && webPlayer.deviceId && !apiDevices.some((d) => d.id === webPlayer.deviceId)
+      ? [
+          {
+            id: webPlayer.deviceId,
+            name: strings.appName,
+            type: "Computer",
+            is_active: false,
+            volume_percent: null,
+            supports_volume: true,
+          },
+          ...apiDevices,
+        ]
+      : apiDevices;
+  const webNote =
+    webPlayer.status === "ready"
+      ? null
+      : webPlayer.problem
+        ? strings.devices.webPlayer[webPlayer.problem]
+        : strings.devices.webPlayer.connecting;
   const root = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
@@ -109,10 +134,10 @@ export function DevicePicker({ placement = "below", showName = true }: Props) {
         >
           <p className="px-2.5 pt-1.5 pb-2 text-sm font-[600] text-ink">{strings.devices.title}</p>
 
-          {isPending ? (
-            <p className="px-2.5 pb-2 text-sm text-ink-faint">{strings.devices.loading}</p>
-          ) : isError ? (
+          {isError ? (
             <p className="px-2.5 pb-2 text-sm text-ink-soft">{strings.devices.error}</p>
+          ) : isPending || !devices ? (
+            <p className="px-2.5 pb-2 text-sm text-ink-faint">{strings.devices.loading}</p>
           ) : devices.length === 0 ? (
             <p className="px-2.5 pb-2 text-sm text-ink-soft">{strings.devices.none}</p>
           ) : (
@@ -135,7 +160,11 @@ export function DevicePicker({ placement = "below", showName = true }: Props) {
                         {device.name}
                       </span>
                       <span className="block text-xs text-ink-faint">
-                        {device.is_active ? strings.devices.current : device.type}
+                        {device.is_active
+                          ? strings.devices.current
+                          : device.id === webPlayer.deviceId
+                            ? `${strings.devices.thisBrowser}. ${strings.devices.playHere}`
+                            : device.type}
                       </span>
                     </span>
                   </button>
@@ -143,6 +172,8 @@ export function DevicePicker({ placement = "below", showName = true }: Props) {
               ))}
             </ul>
           )}
+
+          {webNote && <p className="px-2.5 pt-1 pb-2 text-xs text-ink-faint">{webNote}</p>}
         </div>,
           document.body,
         )}

@@ -11,6 +11,7 @@ import { useArtworkPalette } from "../hooks/useArtworkPalette";
 import { usePlaybackClock } from "../hooks/usePlaybackClock";
 import { usePlayerControls } from "../hooks/usePlayerControls";
 import { strings } from "../lib/strings";
+import { useWebPlayer } from "./WebPlayerProvider";
 
 const NOTICE_MS = 4500;
 
@@ -115,6 +116,14 @@ export function PlaybackProvider({ children }: { children: ReactNode }) {
   };
 
   const playback = withHeldSettings(data?.playback ?? null, held.current);
+
+  // Nothing active anywhere: start new music in this browser, if it can play
+  const webPlayer = useWebPlayer();
+  const startDevice = () => {
+    if (playback || !webPlayer.deviceId) return null;
+    webPlayer.activate(); // still inside the click, so the tab may play sound
+    return webPlayer.deviceId;
+  };
   const progressMs = usePlaybackClock(playback, dataUpdatedAt);
   useArtworkPalette(playback?.track.artwork_url);
 
@@ -167,18 +176,25 @@ export function PlaybackProvider({ children }: { children: ReactNode }) {
       controls.mutate({ action: playback?.is_playing ? "pause" : "play", progressMs }),
     seek: (positionMs) => controls.mutate({ action: "seek", positionMs }),
     playContext: (contextUri, offsetUri) =>
-      controls.mutate({ action: "playContext", contextUri, offsetUri }),
-    playTrack: (uri) => controls.mutate({ action: "playTrack", uri }),
+      controls.mutate({ action: "playContext", contextUri, offsetUri, deviceId: startDevice() }),
+    playTrack: (uri) => controls.mutate({ action: "playTrack", uri, deviceId: startDevice() }),
     playSong: (track) => {
       if (!track.uri) return;
+      const deviceId = startDevice();
       if (track.album_uri) {
-        controls.mutate({ action: "playContext", contextUri: track.album_uri, offsetUri: track.uri });
+        controls.mutate({
+          action: "playContext",
+          contextUri: track.album_uri,
+          offsetUri: track.uri,
+          deviceId,
+        });
       } else {
-        controls.mutate({ action: "playTrack", uri: track.uri });
+        controls.mutate({ action: "playTrack", uri: track.uri, deviceId });
       }
     },
     addToQueue: (uri, title) => controls.mutate({ action: "queue", uri, title }),
-    playTracks: (uris, offsetUri) => controls.mutate({ action: "playTracks", uris, offsetUri }),
+    playTracks: (uris, offsetUri) =>
+      controls.mutate({ action: "playTracks", uris, offsetUri, deviceId: startDevice() }),
     toggleShuffle: () => {
       const next = !playback?.shuffle;
       hold("shuffle", next);
@@ -193,8 +209,10 @@ export function PlaybackProvider({ children }: { children: ReactNode }) {
       hold("volume", Math.round(percent));
       controls.mutate({ action: "volume", percent });
     },
-    transferTo: (deviceId, deviceName) =>
-      controls.mutate({ action: "transfer", deviceId, deviceName }),
+    transferTo: (deviceId, deviceName) => {
+      if (deviceId === webPlayer.deviceId) webPlayer.activate();
+      controls.mutate({ action: "transfer", deviceId, deviceName });
+    },
     notify: setCommandNotice,
   };
 

@@ -4,6 +4,7 @@ import { DevicePicker } from "../components/DevicePicker";
 import { FactsPanel } from "../components/FactsPanel";
 import { QueueIcon } from "../components/icons";
 import { LyricsView } from "../components/LyricsView";
+import { MeaningPanel } from "../components/MeaningPanel";
 import { NowPlaying } from "../components/NowPlaying";
 import { PlayerControls } from "../components/PlayerControls";
 import { RecommendationsPanel } from "../components/RecommendationsPanel";
@@ -12,7 +13,13 @@ import { VolumeControl } from "../components/VolumeControl";
 import { strings } from "../lib/strings";
 import { usePlayback } from "../playback/PlaybackProvider";
 
-export function NowPlayingView({ aiEnabled }: { aiEnabled: boolean }) {
+export function NowPlayingView({
+  aiEnabled,
+  recommendationsEnabled,
+}: {
+  aiEnabled: boolean;
+  recommendationsEnabled: boolean;
+}) {
   const { playback, progressMs, isLoading, isBusy, run, seek, toggleShuffle, cycleRepeat } =
     usePlayback();
 
@@ -56,7 +63,8 @@ export function NowPlayingView({ aiEnabled }: { aiEnabled: boolean }) {
 
         <div className="flex flex-col gap-8 max-lg:hidden">
           <FactsPanel track={track} aiEnabled={aiEnabled} />
-          <RecommendationsPanel track={track} aiEnabled={aiEnabled} />
+          <MeaningPanel key={track.uri ?? track.title} track={track} aiEnabled={aiEnabled} />
+          <RecommendationsPanel track={track} enabled={recommendationsEnabled} />
         </div>
 
         {track.spotify_url && (
@@ -72,12 +80,13 @@ export function NowPlayingView({ aiEnabled }: { aiEnabled: boolean }) {
       </aside>
 
       <section className="relative h-[62dvh] min-h-0 lg:h-auto lg:py-6" aria-label="Lyrics">
-        <LyricsView track={track} progressMs={progressMs} onSeek={seek} />
+        <LyricsView track={track} progressMs={progressMs} onSeek={seek} aiEnabled={aiEnabled} />
       </section>
 
       <div className="flex flex-col gap-8 pb-10 lg:hidden">
         <FactsPanel track={track} aiEnabled={aiEnabled} />
-        <RecommendationsPanel track={track} aiEnabled={aiEnabled} />
+        <MeaningPanel key={track.uri ?? track.title} track={track} aiEnabled={aiEnabled} />
+        <RecommendationsPanel track={track} enabled={recommendationsEnabled} />
       </div>
     </div>
   );

@@ -2,6 +2,8 @@
 
 import { api } from "../api/client";
 import { strings } from "../lib/strings";
+import { Link } from "react-router";
+import { useWebPlayer } from "../playback/WebPlayerProvider";
 
 function Stage({
   title,
@@ -52,9 +54,20 @@ export function ServerDownScreen() {
 }
 
 export function IdleScreen() {
+  const { status } = useWebPlayer();
+
   return (
     <Stage title={strings.idle.title} inShell>
-      <p>{strings.idle.body}</p>
+      {status === "ready" ? (
+        <p>
+          {strings.idle.bodyWithBrowser}{" "}
+          <Link to="/search" className="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
+            {strings.idle.searchLink}
+          </Link>
+        </p>
+      ) : (
+        <p>{strings.idle.body}</p>
+      )}
     </Stage>
   );
 }

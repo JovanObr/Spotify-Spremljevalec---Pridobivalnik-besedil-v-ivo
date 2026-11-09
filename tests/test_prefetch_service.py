@@ -45,10 +45,13 @@ class TestPrefetcher(unittest.TestCase):
             patch.object(prefetch_service.lyrics_service, "get_lyrics"),
             patch.object(prefetch_service.ai_service, "generate_track_facts"),
             patch.object(prefetch_service.recommendation_service, "get_recommendations"),
+            patch.object(prefetch_service.recommendation_service, "is_available", return_value=True),
             patch.object(prefetch_service.ai_service, "is_configured", return_value=True),
             patch.object(prefetch_service, "is_prefetch_enabled", return_value=True),
         ]
-        self.lyrics, self.facts, self.recs, _, self.enabled = [p.start() for p in patches]
+        self.lyrics, self.facts, self.recs, self.recs_available, _, self.enabled = [
+            p.start() for p in patches
+        ]
         for p in patches:
             self.addCleanup(p.stop)
 
@@ -82,7 +85,8 @@ class TestPrefetcher(unittest.TestCase):
 
         self.lyrics.assert_not_called()
 
-    def test_no_facts_without_api_key(self):
+    def test_no_ai_without_api_key(self):
+        self.recs_available.return_value = False
         with patch.object(prefetch_service.ai_service, "is_configured", return_value=False):
             self.prefetcher.on_playback(self.spotify, make_playback("t1"))
 

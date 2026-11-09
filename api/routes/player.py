@@ -40,6 +40,8 @@ class PlayRequest(BaseModel):
     )
     offset_uri: str | None = Field(default=None, pattern=TRACK_URI)
     track_uri: str | None = Field(default=None, pattern=TRACK_URI)
+    # Where to play when no device is active, e.g. this browser (Phase 5)
+    device_id: str | None = Field(default=None, min_length=1, max_length=100)
     track_uris: list[str] | None = Field(
         default=None, min_length=1, max_length=spotify_service.MAX_TRACK_URIS
     )
@@ -162,14 +164,16 @@ def play(
     if body is None:
         command = lambda: spotify_service.control_playback(state.client, "play")
     elif body.track_uri:
-        command = lambda: spotify_service.play_track(state.client, body.track_uri)
+        command = lambda: spotify_service.play_track(
+            state.client, body.track_uri, body.device_id
+        )
     elif body.track_uris:
         command = lambda: spotify_service.play_tracks(
-            state.client, body.track_uris, body.offset_uri
+            state.client, body.track_uris, body.offset_uri, body.device_id
         )
     else:
         command = lambda: spotify_service.play_context(
-            state.client, body.context_uri, body.offset_uri
+            state.client, body.context_uri, body.offset_uri, body.device_id
         )
 
     _run_player_command(state, command)

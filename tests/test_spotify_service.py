@@ -58,7 +58,7 @@ class TestControlPlayback(unittest.TestCase):
 
         play_track(spotify, "spotify:track:x")
 
-        spotify.start_playback.assert_called_once_with(uris=["spotify:track:x"])
+        spotify.start_playback.assert_called_once_with(device_id=None, uris=["spotify:track:x"])
 
     def test_add_to_queue(self):
         spotify = MagicMock()

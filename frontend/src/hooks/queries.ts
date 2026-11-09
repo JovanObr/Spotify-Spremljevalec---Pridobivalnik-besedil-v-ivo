@@ -19,6 +19,26 @@ function isPermanent(error: unknown) {
   return error instanceof ApiError && [401, 403, 422, 503].includes(error.status);
 }
 
+// AI calls sometimes fail for a moment (the model is overloaded or returns
+// an unreadable answer); the server answers 502 then. Try again after 3 s,
+// then 5 s. Other errors (quota used up, no key) aren't retried, since a
+// retry can't fix them and would only use more of the free quota.
+const AI_RETRY_DELAYS_MS = [3000, 5000];
+
+function retryAiFailure(failureCount: number, error: unknown) {
+  return (
+    error instanceof ApiError &&
+    error.status === 502 &&
+    failureCount < AI_RETRY_DELAYS_MS.length
+  );
+}
+
+function aiRetryDelay(attemptIndex: number) {
+  return AI_RETRY_DELAYS_MS[Math.min(attemptIndex, AI_RETRY_DELAYS_MS.length - 1)];
+}
+
+const aiRetry = { retry: retryAiFailure, retryDelay: aiRetryDelay };
+
 export function useStatus() {
   return useQuery({
     queryKey: ["status"],
@@ -64,7 +84,29 @@ export function useFacts(track: Track | undefined, enabled: boolean) {
     queryFn: () => api.facts(track!, FACTS_LANGUAGE),
     enabled: enabled && Boolean(track),
     staleTime: Infinity,
-    retry: false, // each retry costs AI quota; the user can retry manually
+    ...aiRetry, // only temporary failures; the user can still retry by hand
+  });
+}
+
+/** Line-by-line lyrics translation; language null means "off". */
+export function useTranslation(track: Track | undefined, language: string | null) {
+  return useQuery({
+    queryKey: ["translation", track?.id, track?.title, track?.artist, language],
+    queryFn: () => api.translation(track!, language!),
+    enabled: Boolean(track && language),
+    staleTime: Infinity,
+    ...aiRetry,
+  });
+}
+
+/** "What's this song about", fetched only once the user asks. */
+export function useMeaning(track: Track | undefined, enabled: boolean) {
+  return useQuery({
+    queryKey: ["meaning", track?.id, track?.title, track?.artist, FACTS_LANGUAGE],
+    queryFn: () => api.meaning(track!, FACTS_LANGUAGE),
+    enabled: enabled && Boolean(track),
+    staleTime: Infinity,
+    ...aiRetry,
   });
 }
 
@@ -105,10 +147,9 @@ export function useRecommendations(track: Track | undefined, enabled: boolean) {
   return useQuery({
     queryKey: ["recommendations", track?.uri ?? `${track?.artist}|${track?.title}`],
     queryFn: () => api.recommendations(track!),
-    select: (data) => data.items,
     enabled: enabled && Boolean(track),
     staleTime: Infinity,
-    retry: false, // each retry costs AI quota; the user can retry manually
+    ...aiRetry, // only temporary failures; the user can still retry by hand
   });
 }
 

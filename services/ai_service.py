@@ -70,6 +70,12 @@ class SongSuggestions(BaseModel):
     songs: list[SongSuggestion] = Field(min_length=1, max_length=MAX_SUGGESTIONS)
 
 
+class Reasons(BaseModel):
+    reasons: list[str] = Field(
+        description="One sentence per song, in the same order as given."
+    )
+
+
 RECOMMENDATION_INSTRUCTION = (
     "You are a music curator with deep knowledge of every genre and era. "
     "You recommend real, released songs that are available on Spotify. "
@@ -416,8 +422,215 @@ def suggest_similar_songs(
         return list(_suggest(artist, title, album))
 
 
+@lru_cache(maxsize=128)
+def _explain(
+    artist: str,
+    title: str,
+    picks: tuple[tuple[str, str], ...],
+) -> tuple[str, ...]:
+    listing = "\n".join(
+        f'{index + 1}. "{pick_title}" by {pick_artist}'
+        for index, (pick_artist, pick_title) in enumerate(picks)
+    )
+    prompt = (
+        f'A listener likes "{title}" by {artist}. These songs were picked for '
+        f"them by audio analysis:\n{listing}\n\n"
+        "For each song, in order, write one short sentence (at most 18 words) "
+        "on why it suits someone who likes the original: sound, mood, era or "
+        "scene. If you don't know a song, describe it only in general terms."
+    )
+    reasons = _ask(
+        get_gemini_recommendations_model(),
+        RECOMMENDATION_INSTRUCTION,
+        prompt,
+        Reasons,
+    ).reasons
+
+    return tuple(reason.strip() for reason in reasons)
+
+
+def explain_recommendations(
+    artist: str,
+    title: str,
+    picks: list[tuple[str, str]],
+) -> list[str | None]:
+    """
+    One-sentence "why you'd like it" for songs picked elsewhere (e.g. by
+    MusicAtlas), aligned with picks [(artist, title), ...]. One AI call for
+    all of them; missing reasons are None.
+
+    Raises:
+        AINotConfiguredError, AIServiceError
+    """
+    _require_configured()
+    key = (artist.strip(), title.strip(), tuple(picks))
+
+    with _in_flight.lock(("explain",) + key):
+        reasons = list(_explain(*key))
+
+    return [
+        (reasons[index] or None) if index < len(reasons) else None
+        for index in range(len(picks))
+    ]
+
+
+# ---------------------------------------------------------------------------
+# Lyrics translation
+# ---------------------------------------------------------------------------
+
+MAX_TRANSLATION_LINES = 200
+
+TRANSLATION_INSTRUCTION = (
+    "You translate song lyrics line by line for a listener following along. "
+    "Keep the meaning and tone; natural phrasing beats word-for-word. "
+    "Keep each translation on its own line, matching the numbering exactly. "
+    "If a line is already in the target language, or is only sounds (oh, "
+    "la la), repeat it unchanged."
+)
+
+
+class LineTranslation(BaseModel):
+    n: int = Field(description="The line number from the input.")
+    text: str = Field(description="The translated line.")
+
+
+class Translation(BaseModel):
+    lines: list[LineTranslation]
+
+
+@lru_cache(maxsize=64)
+def _translate(artist: str, title: str, lines: tuple[str, ...], language: str) -> tuple[str, ...]:
+    # Only distinct, non-empty lines are sent (choruses repeat a lot)
+    unique = list(dict.fromkeys(line for line in lines if line.strip()))
+    if not unique:
+        return tuple(lines)
+
+    numbered = "\n".join(f"{index + 1}. {line}" for index, line in enumerate(unique))
+    prompt = (
+        f'Song: "{title}" by {artist}\n'
+        f"Translate each numbered line into {language}.\n\n{numbered}"
+    )
+
+    answer = _ask(get_gemini_facts_model(), TRANSLATION_INSTRUCTION, prompt, Translation)
+
+    by_number = {item.n: item.text.strip() for item in answer.lines if item.text.strip()}
+    translated = {
+        line: by_number.get(index + 1, "") for index, line in enumerate(unique)
+    }
+    if not any(translated.values()):
+        raise AIServiceError("The AI returned no translation.")
+
+    return tuple(translated.get(line, "") if line.strip() else "" for line in lines)
+
+
+def translate_lyrics(
+    artist: str,
+    title: str,
+    lines: list[str],
+    language: str,
+) -> list[str]:
+    """
+    Translate lyrics line by line. The result has one entry per input line
+    ("" for empty lines or lines the model skipped). Cached per song and
+    language.
+
+    Raises:
+        ValueError, AINotConfiguredError, AIServiceError
+    """
+    if not artist.strip() or not title.strip():
+        raise ValueError("Artist and title must not be empty.")
+    if not language.strip():
+        raise ValueError("Language must not be empty.")
+
+    _require_configured()
+
+    key = (artist.strip(), title.strip(), tuple(lines[:MAX_TRANSLATION_LINES]), language.strip())
+    with _in_flight.lock(("translate", key[0], key[1], key[3])):
+        return list(_translate(*key))
+
+
+# ---------------------------------------------------------------------------
+# What's this song about
+# ---------------------------------------------------------------------------
+
+MEANING_INSTRUCTION = (
+    "You are a thoughtful music writer explaining what songs are about. "
+    "Base your explanation on the lyrics when they are provided. Paraphrase; "
+    "never quote more than a few words of the lyrics. If the meaning is "
+    "debated or unclear, say so instead of inventing a backstory."
+)
+
+
+class SongMeaning(BaseModel):
+    summary: str = Field(description="What the song is about, 3 to 5 sentences.")
+    themes: list[str] = Field(
+        max_length=4, description="Up to four short themes, 1-3 words each."
+    )
+
+
+@lru_cache(maxsize=64)
+def _meaning(
+    artist: str, title: str, album: str | None, lyrics: str | None, language: str
+) -> SongMeaning:
+    album_line = f'Album: "{album}"\n' if album else ""
+    lyrics_part = (
+        f"\nLyrics:\n{lyrics}\n"
+        if lyrics
+        else "\n(No lyrics available: rely on what you know about the song.)\n"
+    )
+    prompt = (
+        f'Song: "{title}"\nArtist: {artist}\n{album_line}{lyrics_part}\n'
+        f"Explain what this song is about. Write in {language}."
+    )
+
+    meaning = _ask(get_gemini_recommendations_model(), MEANING_INSTRUCTION, prompt, SongMeaning)
+
+    if not meaning.summary.strip():
+        raise AIServiceError("The AI returned no explanation.")
+    return SongMeaning(
+        summary=meaning.summary.strip(),
+        themes=[theme.strip() for theme in meaning.themes if theme.strip()][:4],
+    )
+
+
+MAX_LYRICS_CHARS = 6000
+
+
+def explain_song(
+    artist: str,
+    title: str,
+    album: str | None = None,
+    lyrics: str | None = None,
+    language: str = DEFAULT_LANGUAGE,
+) -> SongMeaning:
+    """
+    A short explanation of what a song is about, grounded in its lyrics
+    when available. Cached per song and language.
+
+    Raises:
+        ValueError, AINotConfiguredError, AIServiceError
+    """
+    if not artist.strip() or not title.strip():
+        raise ValueError("Artist and title must not be empty.")
+
+    _require_configured()
+
+    key = (
+        artist.strip(),
+        title.strip(),
+        album.strip() if album else None,
+        (lyrics or "").strip()[:MAX_LYRICS_CHARS] or None,
+        language.strip() or DEFAULT_LANGUAGE,
+    )
+    with _in_flight.lock(("meaning", key[0], key[1], key[4])):
+        return _meaning(*key)
+
+
 def clear_cache() -> None:
     """Forget cached answers and the client (used by tests)."""
     _generate.cache_clear()
     _suggest.cache_clear()
+    _explain.cache_clear()
+    _translate.cache_clear()
+    _meaning.cache_clear()
     _get_client.cache_clear()

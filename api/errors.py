@@ -1,7 +1,28 @@
-"""Translate Spotify errors into HTTP errors the frontend understands."""
+"""Translate Spotify and AI errors into HTTP errors the frontend understands."""
+
+import logging
 
 from fastapi import HTTPException
 from spotipy.exceptions import SpotifyException
+
+from services import ai_service
+
+
+# uvicorn's logger, so the reason shows up next to the "502" line
+logger = logging.getLogger("uvicorn.error")
+
+
+def ai_http_error(error: ai_service.AIServiceError) -> HTTPException:
+    """
+    503: no key configured. 429: quota used up. 502: the AI call failed
+    (often a temporary overload or an unreadable answer; the frontend
+    retries those).
+    """
+    if isinstance(error, ai_service.AINotConfiguredError):
+        return HTTPException(503, str(error))
+    status = 429 if error.status_code == 429 else 502
+    logger.warning("AI request failed (%s): %s", status, error)
+    return HTTPException(status, str(error))
 
 
 def spotify_http_error(error: SpotifyException) -> HTTPException:

@@ -32,3 +32,6 @@ Thumbs.db
 # Frontend
 frontend/node_modules/
 frontend/dist/
+
+# Archives (e.g. exported project zips)
+*.zip

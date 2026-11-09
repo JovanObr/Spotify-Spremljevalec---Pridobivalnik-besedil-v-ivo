@@ -88,12 +88,12 @@ class Prefetcher:
         self._executor.submit(self._safely, self._warm_lyrics, track)
         if ai_service.is_configured():
             self._executor.submit(self._safely, self._warm_facts, track)
-            if spotify is not None:
-                self._executor.submit(
-                    self._safely,
-                    lambda t: self._warm_recommendations(spotify, t),
-                    track,
-                )
+        if spotify is not None and recommendation_service.is_available():
+            self._executor.submit(
+                self._safely,
+                lambda t: self._warm_recommendations(spotify, t),
+                track,
+            )
 
     @staticmethod
     def _warm_lyrics(track: Track):

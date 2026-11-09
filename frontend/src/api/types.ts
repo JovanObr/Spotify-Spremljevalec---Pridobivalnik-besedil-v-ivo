@@ -49,6 +49,8 @@ export interface NowPlayingResponse {
 export interface StatusResponse {
   authenticated: boolean;
   ai_enabled: boolean;
+  /** MusicAtlas or the AI is configured. */
+  recommendations_enabled: boolean;
 }
 
 export interface LyricLine {
@@ -73,6 +75,20 @@ export interface LyricsResponse {
 
 export interface FactsResponse {
   facts: string[];
+}
+
+// Phase 6 (api/routes/lyrics.py)
+
+/** One entry per displayed lyric line, "" where there's nothing to show. */
+export interface TranslationResponse {
+  language: string;
+  lines: string[];
+}
+
+export interface MeaningResponse {
+  summary: string;
+  themes: string[];
+  based_on_lyrics: boolean;
 }
 
 export type PlayerAction = "play" | "pause" | "next" | "previous";
@@ -112,8 +128,16 @@ export interface PlaylistItemsPage {
 
 export interface Recommendation {
   track: Track;
-  /** One sentence from the AI on why it fits. */
-  reason: string;
+  /** One sentence on why it fits (may be missing). */
+  reason: string | null;
+}
+
+export interface RecommendationsResponse {
+  items: Recommendation[];
+  /** Who picked the songs. */
+  source: "musicatlas" | "ai";
+  /** MusicAtlas style tags for the current song, e.g. "dreampop". */
+  tags: string[];
 }
 
 // Phase 4: queue, search

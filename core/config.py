@@ -96,3 +96,11 @@ def get_lyrics_providers() -> tuple[str, ...]:
 def is_prefetch_enabled() -> bool:
     """Prepare facts and lyrics for the next queued song (PREFETCH_NEXT=0 to disable)."""
     return os.getenv("PREFETCH_NEXT", "1").lower() not in ("0", "false", "no")
+
+
+def get_musicatlas_api_key() -> str | None:
+    """
+    MusicAtlas API key (https://musicatlas.ai/developer). Optional: without
+    it, recommendations come from the AI model alone.
+    """
+    return os.getenv("MUSICATLAS_API_KEY") or None

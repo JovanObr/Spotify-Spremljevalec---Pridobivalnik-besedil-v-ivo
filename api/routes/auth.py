@@ -4,12 +4,12 @@ import os
 
 from urllib.parse import urlparse
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.responses import RedirectResponse
 from spotipy.exceptions import SpotifyOauthError
 
 from api.state import SpotifyState, get_spotify_state
-from services import ai_service, library_service, search_service
+from services import ai_service, library_service, recommendation_service, search_service
 from services.prefetch_service import prefetcher
 
 
@@ -96,6 +96,31 @@ def logout(state: SpotifyState = Depends(get_spotify_state)):
     return {"authenticated": False}
 
 
+@router.get("/api/token")
+def token(response: Response, state: SpotifyState = Depends(get_spotify_state)):
+    """
+    A short-lived access token for the Spotify Web Playback SDK, which
+    plays music in this browser tab. Spotipy refreshes it when needed.
+
+    The server only listens on 127.0.0.1 and CORS only allows the local dev
+    server, so other websites can't read this.
+    """
+    response.headers["Cache-Control"] = "no-store"
+
+    info = state.auth_manager.validate_token(
+        state.auth_manager.cache_handler.get_cached_token()
+    )
+    if not info:
+        raise HTTPException(401, "Not logged in to Spotify.")
+
+    scopes = set((info.get("scope") or "").split())
+    if "streaming" not in scopes:
+        # Logged in before Phase 5 added the scope: log in again to get it
+        raise HTTPException(403, "Log in to Spotify again to allow playback in the browser.")
+
+    return {"access_token": info["access_token"], "expires_at": info.get("expires_at")}
+
+
 @router.get("/api/status")
 def status(state: SpotifyState = Depends(get_spotify_state)):
     """What is configured and connected. The frontend calls this first."""
@@ -103,4 +128,5 @@ def status(state: SpotifyState = Depends(get_spotify_state)):
     return {
         "authenticated": state.is_authenticated(),
         "ai_enabled": ai_service.is_configured(),
+        "recommendations_enabled": recommendation_service.is_available(),
     }
