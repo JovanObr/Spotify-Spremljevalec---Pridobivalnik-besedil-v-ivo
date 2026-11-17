@@ -147,6 +147,28 @@ export const strings = {
     failed: "Couldn't update Liked Songs. Try again.",
   },
 
+  recent: {
+    title: "Recently played",
+    subtitle: "Your last 50 plays, newest first",
+    tile: "Your last 50 plays",
+    empty: "Nothing played recently. Songs show up here a minute or two after you play them.",
+    error: "Your recently played songs couldn't be loaded.",
+    playedAt: (when: string) => `Played ${when}`,
+  },
+
+  addToPlaylist: {
+    button: (title: string) => `Add "${title}" to a playlist`,
+    heading: "Add to playlist",
+    filter: "Find a playlist",
+    loading: "Loading your playlists…",
+    error: "Your playlists couldn't be loaded.",
+    none: "You don't have any playlists you can add to. Create one in Spotify first.",
+    noMatch: "No playlist with that name.",
+    added: (title: string, playlist: string) => `Added "${title}" to ${playlist}`,
+    failed: "Couldn't add the song. Try again.",
+    forbidden: "You can only add songs to playlists you own or collaborate on.",
+  },
+
   liked: {
     title: "Liked Songs",
     empty: "Songs you like show up here. Tap the heart next to any song.",

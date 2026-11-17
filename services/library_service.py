@@ -20,6 +20,7 @@ _playlists_cache = TTLCache(ttl_seconds=60, max_size=4)
 _detail_cache = TTLCache(ttl_seconds=60, max_size=128)
 _items_cache = TTLCache(ttl_seconds=600, max_size=512)
 _liked_cache = TTLCache(ttl_seconds=30, max_size=64)
+_recent_cache = TTLCache(ttl_seconds=30, max_size=2)
 
 
 def get_current_user_id(spotify: spotipy.Spotify) -> str | None:
@@ -160,7 +161,62 @@ def set_liked(spotify: spotipy.Spotify, uris: list[str], liked: bool) -> None:
     _liked_cache.clear()
 
 
+# ---------------------------------------------------------------------------
+# Recently played
+# ---------------------------------------------------------------------------
+
+RECENT_LIMIT = 50  # Spotify keeps only the last 50 plays
+
+
+def get_recently_played(spotify: spotipy.Spotify) -> list[PlaylistItem]:
+    """
+    Songs played recently, newest first, each song once. "added_at" is when
+    it was last played.
+    """
+
+    def fetch():
+        page = spotify.current_user_recently_played(limit=RECENT_LIMIT) or {}
+        items: list[PlaylistItem] = []
+        seen: set[str] = set()
+
+        for entry in page.get("items") or []:
+            if not entry:
+                continue
+            item = PlaylistItem.from_spotify(
+                {"track": entry.get("track"), "added_at": entry.get("played_at")},
+                len(items),
+            )
+            key = item and (item.track.uri or item.track.title)
+            if item is None or key in seen:
+                continue
+            seen.add(key)
+            items.append(item)
+
+        return items
+
+    return _recent_cache.get_or_set("recent", fetch)
+
+
+# ---------------------------------------------------------------------------
+# Editing playlists
+# ---------------------------------------------------------------------------
+
+def add_to_playlist(spotify: spotipy.Spotify, playlist_id: str, uris: list[str]) -> str | None:
+    """
+    Add songs to the end of a playlist the user owns or collaborates on.
+    Returns the playlist's new snapshot_id.
+    """
+    result = spotify.playlist_add_items(playlist_id, uris) or {}
+
+    # Its song count and track list changed
+    _playlists_cache.clear()
+    _detail_cache.clear()
+    _items_cache.clear()
+
+    return result.get("snapshot_id")
+
+
 def clear_cache() -> None:
     """Forget everything (on logout, so another account starts fresh)."""
-    for cache in (_user_cache, _playlists_cache, _detail_cache, _items_cache, _liked_cache):
+    for cache in (_user_cache, _playlists_cache, _detail_cache, _items_cache, _liked_cache, _recent_cache):
         cache.clear()

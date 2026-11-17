@@ -14,7 +14,7 @@ It integrates three external services:
 There are two ways to use it:
 
 - **Web app** (main interface): a React frontend served by a FastAPI backend.
-- **Terminal app**: `python main.py`, a simple text monitor.
+- **Terminal app**: `python main.py`, a client of the gRPC server (`python -m grpc_api`). It shows the current song and its lyrics line by line as they're sung, and lets you search, read lyrics and facts, and control playback.
 
 ## Features
 
@@ -29,6 +29,8 @@ There are two ways to use it:
 - **Search** for songs, artists, albums and playlists. A song picked from search, Up next or recommendations plays inside its album, so the rest of the album (and Spotify's autoplay) follows.
 - **Up next:** see your queue, and add any song to it from any list.
 - **Liked Songs:** like or unlike the current song with the heart, and play from your Liked Songs.
+- **Recently played:** your last 50 plays (each song once, newest first) as a tile in the Library; play from any of them.
+- **Add to playlist:** the ⊕ button next to any song (lists, search, Now Playing, recommendations) adds it to one of your playlists, with a filter when you have many.
 - **Devices, shuffle, repeat and volume:** choose which Spotify app or speaker plays, and control playback modes.
 - **Playlists:** your own and followed playlists in a library grid; open one to see its songs and start it from any song. Followed playlists can be played as a whole (Spotify doesn't share their track lists with apps like this).
 - Lyrics from several sources: LRCLIB is searched in up to five ways, from an exact match to a free-text search that tolerates different artist spellings and titles like "Song - Remastered 2011". Synced lyrics are preferred; lyrics.ovh is the backup for plain lyrics. If nothing is found, a link searches Genius.
@@ -38,9 +40,9 @@ There are two ways to use it:
 - **What's this song about:** on request, a short AI explanation of the song's meaning based on its lyrics, with a few themes.
 - Prefetching: when a song starts, the lyrics, facts and recommendations for the next song in your Spotify queue are prepared in the background, so they appear instantly when it plays.
 - The page takes its colours from the current album cover.
-- In-memory caching: lyrics and AI facts are fetched once per track, even when several requests for the same song arrive at once.
+- Caching: lyrics and AI answers are fetched once per track, even when several requests for the same song arrive at once, and are kept on disk (`.data/cache.sqlite3`) so restarting the app doesn't spend the free AI and MusicAtlas quotas again.
 - Handling of rate limits (Spotify, LRCLIB, Gemini), expired logins, missing playback and podcasts.
-- Automated tests for the services, the playback monitor and the web API.
+- Automated tests for the services, the web API and the gRPC server, run by GitHub Actions on every push.
 
 ## Requirements
 
@@ -107,18 +109,16 @@ npm install
 
 ### Web app (development)
 
-Use two terminals:
+One command starts the Python API and the frontend together:
 
 ```bash
-# Terminal 1: Python API on http://127.0.0.1:8888
-python -m api
-
-# Terminal 2: frontend with hot reload on http://127.0.0.1:5173
 cd frontend
 npm run dev
 ```
 
-Open **http://127.0.0.1:5173** and click **Connect Spotify**. If you logged in with an older version, you'll be asked to connect once more: the app now requests every permission the planned features need (see `SPOTIFY_SCOPES` in `services/spotify_service.py`), so future updates won't need another login. Use `127.0.0.1`, not `localhost`, so it matches the Spotify redirect URI.
+On Windows you can also double-click **`start.bat`** in the project folder. The API's lines are labelled `[api]` and the frontend's `[web]`; `Ctrl+C` stops both, and if one stops, so does the other. It uses the Python in `.venv` when there is one (set `PYTHON` to use another). To run them separately as before: `python -m api` and `npm run dev:web`.
+
+Open **http://127.0.0.1:5173** and click **Connect Spotify**. If you logged in with an older version, you'll be asked to connect once more: adding songs to playlists needed two new permissions (see `SPOTIFY_SCOPES` in `services/spotify_service.py`). Use `127.0.0.1`, not `localhost`, so it matches the Spotify redirect URI.
 
 To restart the API automatically when Python files change: `$env:API_RELOAD="1"; python -m api` (PowerShell).
 
@@ -133,13 +133,42 @@ python -m api
 
 The API now also serves the built frontend, so everything runs on **http://127.0.0.1:8888**.
 
-### Terminal app
+### Terminal app (gRPC)
+
+Use two terminals:
 
 ```bash
-python main.py
+# Terminal 1: gRPC server on 127.0.0.1:50051 (logs every call)
+python -m grpc_api
+
+# Terminal 2: the terminal app (gRPC client)
+python main.py                # add --show-delay to see each lyric line's delivery time
 ```
 
-Press `Ctrl+C` to stop.
+The server uses the same Spotify login as the web app (`.cache`). Without one, it opens the browser to log in; if the web app is running at the same time, log in there instead, since both use port 8888 for the login callback. The web app and the gRPC server can run at the same time.
+
+In the menu, **1** opens the live view (a `WatchPlayback` stream). Press `Ctrl+C` to return to the menu.
+
+## gRPC service
+
+Defined in [`grpc_api/companion.proto`](grpc_api/companion.proto): one service, `SoundCompanion`, with six RPCs.
+
+| RPC | Type | What it does |
+|-----|------|--------------|
+| `GetNowPlaying` | unary | The current song, play state, position and device |
+| `SearchTracks` | unary | Songs matching a query (up to 10) |
+| `GetLyrics` | unary | Lyrics for a song the user picked: timed lines, or plain text |
+| `GetSongFacts` | unary | AI-written facts about a picked song |
+| `ControlPlayback` | unary | Play, pause, next, previous, or play a picked song |
+| `WatchPlayback` | server streaming | Pushes events as they happen: `track_changed` (with lyrics), `play_state`, `lyric_line`, `idle` |
+
+The main data message is `Track`; `Playback`, `LyricLine` and a request/response pair for each RPC build on it.
+
+**How the stream stays on time:** the server asks Spotify for the player state every 2 seconds (`poll_interval_ms`), but checks 10 times a second whether a new lyric line has started, estimating the position from the clock in between. So each line is sent when it's sung, not up to 2 seconds late. Small backward corrections after a pause don't repeat a line; real seeks do.
+
+**Errors** map to gRPC status codes: empty input `INVALID_ARGUMENT`, no active device `NOT_FOUND`, no Premium `PERMISSION_DENIED`, expired login `UNAUTHENTICATED`, quota `RESOURCE_EXHAUSTED`, AI not configured `FAILED_PRECONDITION`, temporary failures `UNAVAILABLE`. Temporary Spotify errors don't end the stream; it retries.
+
+After editing the `.proto` file, regenerate the Python code with `python -m grpc_api.generate`. The generated files (`companion_pb2.py`, `.pyi`, `companion_pb2_grpc.py`) are committed.
 
 ## API endpoints
 
@@ -161,11 +190,13 @@ Press `Ctrl+C` to stop.
 | GET | `/api/search?q=` | Songs, artists, albums and playlists (10 of each) |
 | GET | `/api/library/tracks?offset=` | Your liked songs, 50 at a time |
 | GET | `/api/library/contains?uris=` | Which songs are liked |
+| GET | `/api/library/recent` | Your last 50 plays, each song once, newest first |
 | PUT / DELETE | `/api/library/tracks` | Like / unlike `{"uris": [...]}` |
 | GET | `/api/recommendations?artist=&title=&album=&track_uri=` | Three songs you might like: `{items, source: "musicatlas"\|"ai", tags}` |
 | GET | `/api/playlists` | Every playlist in your library |
 | GET | `/api/playlists/{id}` | One playlist's details (`items_available` says whether its songs can be listed) |
 | GET | `/api/playlists/{id}/items?offset=` | 50 songs at a time |
+| POST | `/api/playlists/{id}/items` | Add songs `{"uris": [...]}` to a playlist you own or collaborate on |
 | GET | `/api/lyrics?artist=&title=&album=&duration_ms=` | Lyrics with parsed synced lines |
 | GET | `/api/facts?artist=&title=&album=&language=` | AI-generated facts |
 | GET | `/api/lyrics/translation?artist=&title=&language=&album=&duration_ms=` | The lyrics translated line by line (one entry per displayed line) |
@@ -179,6 +210,8 @@ Interactive documentation is available at http://127.0.0.1:8888/docs while the A
 python -m unittest discover -s tests -v
 ```
 
+GitHub Actions (`.github/workflows/ci.yml`) runs these tests and the frontend build on every push and pull request; results are on the repository's **Actions** tab. No secrets are needed: every outside service is faked in the tests.
+
 ```bash
 cd frontend
 npm run typecheck
@@ -187,7 +220,9 @@ npm run typecheck
 ## Project structure
 
 ```text
-├── main.py                  Terminal app
+├── main.py                  Terminal app (gRPC client)
+├── start.bat                Windows: starts the API and frontend together
+├── .github/workflows/ci.yml Tests and build on every push
 ├── requirements.txt
 ├── .env.example
 │
@@ -197,6 +232,15 @@ npm run typecheck
 │   ├── state.py             Shared Spotify client and login state (a FastAPI dependency)
 │   ├── errors.py            Spotify errors -> HTTP errors
 │   └── routes/              One router per feature: auth, player, library, search, lyrics, ai
+│
+├── grpc_api/
+│   ├── companion.proto      The gRPC contract: service, RPCs and messages
+│   ├── companion_pb2*.py    Generated code (python -m grpc_api.generate)
+│   ├── __main__.py          Starts the gRPC server (python -m grpc_api)
+│   ├── server.py            The servicer: RPCs -> the same services the web API uses
+│   ├── tracker.py           WatchPlayback logic: song changes, pauses, lyric timing
+│   ├── convert.py           App models -> protobuf messages
+│   └── client.py            Small client wrapper used by main.py
 │
 ├── core/
 │   └── config.py            Environment variables and paths
@@ -217,8 +261,9 @@ npm run typecheck
 │
 ├── utils/
 │   ├── display.py           Terminal output
-│   ├── spotify_errors.py    Spotify error handling for the terminal app
+│   ├── spotify_errors.py    Retry delays for Spotify errors
 │   ├── cache.py             Small in-memory cache with expiry
+│   ├── persistent_cache.py  SQLite cache that survives restarts (.data/cache.sqlite3)
 │   ├── single_flight.py     Makes simultaneous requests for the same song share one lookup
 │   └── text.py              Loose title/artist matching (accents, "The", punctuation)
 │

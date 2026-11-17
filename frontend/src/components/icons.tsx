@@ -134,3 +134,24 @@ export function QueueIcon(props: IconProps) {
     </Stroke>
   );
 }
+
+/** A plus in a circle: add to a playlist. */
+export function AddIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 8v8M8 12h8" />
+    </Stroke>
+  );
+}
+
+/** A clock turning back: recently played. */
+export function HistoryIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M3.5 12a8.5 8.5 0 1 0 2.5-6" />
+      <path d="M3.5 4v4.5H8" />
+      <path d="M12 7.5V12l3 2" />
+    </Stroke>
+  );
+}

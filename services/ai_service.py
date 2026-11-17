@@ -23,6 +23,7 @@ from core.config import (
     get_gemini_facts_model,
     get_gemini_recommendations_model,
 )
+from utils import persistent_cache
 from utils.single_flight import SingleFlight
 
 
@@ -288,6 +289,10 @@ def _require_configured():
 # Facts
 # ---------------------------------------------------------------------------
 
+# AI answers about a song don't change, so they're kept on disk for long
+AI_CACHE_TTL = 90 * persistent_cache.DAY
+
+
 @lru_cache(maxsize=128)
 def _generate(
     artist: str,
@@ -295,6 +300,14 @@ def _generate(
     album: str | None,
     language: str,
 ) -> tuple[str, ...]:
+    return persistent_cache.remember(
+        "ai.facts", (artist, title, album, language), AI_CACHE_TTL,
+        lambda: _generate_fresh(artist, title, album, language),
+        encode=list, decode=tuple,
+    )
+
+
+def _generate_fresh(artist: str, title: str, album: str | None, language: str) -> tuple[str, ...]:
     facts = _ask(
         get_gemini_facts_model(),
         SYSTEM_INSTRUCTION,
@@ -368,6 +381,15 @@ def _recommendation_prompt(artist: str, title: str, album: str | None) -> str:
 
 @lru_cache(maxsize=128)
 def _suggest(artist: str, title: str, album: str | None) -> tuple[SongSuggestion, ...]:
+    return persistent_cache.remember(
+        "ai.suggest", (artist, title, album), AI_CACHE_TTL,
+        lambda: _suggest_fresh(artist, title, album),
+        encode=lambda songs: [song.model_dump() for song in songs],
+        decode=lambda data: tuple(SongSuggestion(**song) for song in data),
+    )
+
+
+def _suggest_fresh(artist: str, title: str, album: str | None) -> tuple[SongSuggestion, ...]:
     model = get_gemini_recommendations_model()
 
     songs = _ask(
@@ -424,6 +446,18 @@ def suggest_similar_songs(
 
 @lru_cache(maxsize=128)
 def _explain(
+    artist: str,
+    title: str,
+    picks: tuple[tuple[str, str], ...],
+) -> tuple[str, ...]:
+    return persistent_cache.remember(
+        "ai.reasons", (artist, title, picks), AI_CACHE_TTL,
+        lambda: _explain_fresh(artist, title, picks),
+        encode=list, decode=tuple,
+    )
+
+
+def _explain_fresh(
     artist: str,
     title: str,
     picks: tuple[tuple[str, str], ...],
@@ -500,6 +534,14 @@ class Translation(BaseModel):
 
 @lru_cache(maxsize=64)
 def _translate(artist: str, title: str, lines: tuple[str, ...], language: str) -> tuple[str, ...]:
+    return persistent_cache.remember(
+        "ai.translation", (artist, title, lines, language), AI_CACHE_TTL,
+        lambda: _translate_fresh(artist, title, lines, language),
+        encode=list, decode=tuple,
+    )
+
+
+def _translate_fresh(artist: str, title: str, lines: tuple[str, ...], language: str) -> tuple[str, ...]:
     # Only distinct, non-empty lines are sent (choruses repeat a lot)
     unique = list(dict.fromkeys(line for line in lines if line.strip()))
     if not unique:
@@ -570,6 +612,17 @@ class SongMeaning(BaseModel):
 
 @lru_cache(maxsize=64)
 def _meaning(
+    artist: str, title: str, album: str | None, lyrics: str | None, language: str
+) -> SongMeaning:
+    return persistent_cache.remember(
+        "ai.meaning", (artist, title, album, lyrics, language), AI_CACHE_TTL,
+        lambda: _meaning_fresh(artist, title, album, lyrics, language),
+        encode=lambda meaning: meaning.model_dump(),
+        decode=lambda data: SongMeaning(**data),
+    )
+
+
+def _meaning_fresh(
     artist: str, title: str, album: str | None, lyrics: str | None, language: str
 ) -> SongMeaning:
     album_line = f'Album: "{album}"\n' if album else ""

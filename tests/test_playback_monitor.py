@@ -1,146 +1,67 @@
+"""What the terminal client (main.py) prints for data it gets over gRPC."""
+
 import unittest
-from unittest.mock import patch
 
-from main import process_playback
+from grpc_api import companion_pb2 as pb
+from main import format_event, format_lyrics, format_playback, format_track_line
 
 
-class TestPlaybackMonitor(unittest.TestCase):
+def playback(is_playing=True):
+    return pb.Playback(
+        track=pb.Track(title="Song A", artists=["Artist A", "B"], album="Album A", duration_ms=200_000),
+        is_playing=is_playing,
+        progress_ms=30_000,
+        device_name="Laptop",
+    )
 
-    def setUp(self):
-        self.track_a = {
-            "id": "track_a",
-            "type": "track",
-            "name": "Song A",
-            "artists": [{"name": "Artist A"}],
-            "album": {"name": "Album A"},
-            "duration_ms": 200000,
-        }
 
-        self.track_b = {
-            "id": "track_b",
-            "type": "track",
-            "name": "Song B",
-            "artists": [{"name": "Artist B"}],
-            "album": {"name": "Album B"},
-            "duration_ms": 180000,
-        }
+class TestTerminalFormatting(unittest.TestCase):
 
-    def make_playback(self, track, is_playing=True):
-        return {
-            "item": track,
-            "is_playing": is_playing,
-            "progress_ms": 30000,
-        }
+    def test_playback_box(self):
+        text = "\n".join(format_playback(playback()))
 
-    @patch("main.display_track")
-    def test_new_track_is_displayed(self, mock_display):
-        result = process_playback(
-            self.make_playback(self.track_a),
-            None,
-            None,
-            False,
-        )
+        self.assertIn("Song A", text)
+        self.assertIn("Artist A, B  |  Album A", text)
+        self.assertIn("Playing on Laptop  00:30 / 03:20", text)
 
-        self.assertEqual(result, ("track_a", True, False))
-        mock_display.assert_called_once()
+    def test_track_changed_without_lyrics(self):
+        event = pb.PlaybackEvent(track_changed=pb.TrackChanged(
+            playback=playback(), lyrics=pb.LyricsResponse(found=False)
+        ))
 
-    @patch("main.display_track")
-    def test_same_track_is_not_displayed_again(self, mock_display):
-        result = process_playback(
-            self.make_playback(self.track_a),
-            "track_a",
-            True,
-            False,
-        )
+        text = "\n".join(format_event(event))
 
-        self.assertEqual(result, ("track_a", True, False))
-        mock_display.assert_not_called()
+        self.assertIn("Song A", text)
+        self.assertIn("No lyrics found", text)
 
-    @patch("main.display_track")
-    def test_different_track_is_displayed(self, mock_display):
-        result = process_playback(
-            self.make_playback(self.track_b),
-            "track_a",
-            True,
-            False,
-        )
+    def test_lyric_line_with_delay(self):
+        event = pb.PlaybackEvent(sent_at_ms=1000, lyric_line=pb.LyricLine(time_ms=65_000, text="Hello"))
 
-        self.assertEqual(result, ("track_b", True, False))
-        mock_display.assert_called_once()
+        self.assertEqual(format_event(event), ["  [01:05] Hello"])
+        self.assertEqual(format_event(event, received_at_ms=1004), ["  [01:05] Hello   (4 ms)"])
 
-    @patch("main.display_track")
-    def test_paused_track_updates_playback_state(self, mock_display):
-        result = process_playback(
-            self.make_playback(self.track_a, False),
-            "track_a",
-            True,
-            False,
-        )
+    def test_pause_event(self):
+        event = pb.PlaybackEvent(play_state=pb.PlayStateChanged(is_playing=False, progress_ms=90_000))
 
-        self.assertEqual(result, ("track_a", False, False))
-        mock_display.assert_not_called()
+        self.assertEqual(format_event(event), ["  -- Paused at 01:30 --"])
 
-    @patch("main.display_track")
-    def test_resuming_same_track_does_not_redisplay_track(self, mock_display):
-        result = process_playback(
-            self.make_playback(self.track_a, True),
-            "track_a",
-            False,
-            False,
-        )
+    def test_idle_event(self):
+        event = pb.PlaybackEvent(idle=pb.Idle(reason="Nothing is playing on Spotify."))
 
-        self.assertEqual(result, ("track_a", True, False))
-        mock_display.assert_not_called()
+        self.assertIn("Nothing is playing on Spotify. Waiting...", format_event(event)[1])
 
-    @patch("main.display_track")
-    def test_new_track_after_empty_playback_is_displayed(self, mock_display):
-        result = process_playback(
-            self.make_playback(self.track_b),
-            None,
-            None,
-            True,
-        )
+    def test_synced_and_plain_lyrics(self):
+        synced = pb.LyricsResponse(found=True, synced=True, source="LRCLIB",
+                                   lines=[pb.LyricLine(time_ms=1000, text="Hi"), pb.LyricLine(time_ms=2000)])
+        plain = pb.LyricsResponse(found=True, plain_lyrics="One\nTwo", source="lyrics.ovh")
 
-        self.assertEqual(result, ("track_b", True, False))
-        mock_display.assert_called_once()
+        self.assertEqual(format_lyrics(synced), ["[00:01] Hi", "[00:02] ♪", "(Lyrics from LRCLIB)"])
+        self.assertEqual(format_lyrics(plain), ["One", "Two", "(Lyrics from lyrics.ovh)"])
 
-    def test_no_playback_resets_state(self):
-        result = process_playback(
-            None,
-            "track_a",
-            True,
-            False,
-        )
+    def test_search_result_line(self):
+        line = format_track_line(3, pb.Track(title="Song", artists=["X"], duration_ms=61_000, is_playable=False))
 
-        self.assertEqual(result, (None, None, True))
-
-    def test_empty_playback_does_not_repeat_message(self):
-        result = process_playback(
-            None,
-            None,
-            None,
-            True,
-        )
-
-        self.assertEqual(result, (None, None, True))
-
-    def test_non_track_content_resets_state(self):
-        playback = {
-            "item": {
-                "id": "episode_a",
-                "type": "episode",
-            },
-            "is_playing": True,
-        }
-
-        result = process_playback(
-            playback,
-            "track_a",
-            True,
-            False,
-        )
-
-        self.assertEqual(result, (None, None, True))
+        self.assertEqual(line, "  3. Song - X [01:01]  (not playable)")
 
 
 if __name__ == "__main__":

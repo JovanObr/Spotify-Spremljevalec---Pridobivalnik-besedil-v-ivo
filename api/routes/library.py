@@ -89,8 +89,37 @@ def playlist_items(
     }
 
 
+class AddItemsRequest(BaseModel):
+    uris: list[str] = Field(min_length=1, max_length=40)
+
+
+@router.post("/{playlist_id}/items")
+def add_items(
+    body: AddItemsRequest,
+    playlist_id: str = PlaylistId,
+    state: SpotifyState = Depends(get_spotify_state),
+):
+    """Add songs to the end of one of the user's playlists."""
+
+    uris = _check_track_uris(body.uris)
+
+    try:
+        snapshot_id = _call(
+            state,
+            lambda client: library_service.add_to_playlist(client, playlist_id, uris),
+        )
+    except HTTPException as error:
+        if error.status_code == 403:
+            raise HTTPException(
+                403, "You can only add songs to playlists you own or collaborate on."
+            ) from error
+        raise
+
+    return {"added": len(uris), "snapshot_id": snapshot_id}
+
+
 # ---------------------------------------------------------------------------
-# Liked songs
+# Liked songs and recently played
 # ---------------------------------------------------------------------------
 
 class LikeRequest(BaseModel):
@@ -114,6 +143,14 @@ def liked_tracks(
 
     page = _call(state, lambda client: library_service.get_liked_tracks(client, offset))
     return {**page, "items": [item.to_dict() for item in page["items"]]}
+
+
+@liked_router.get("/recent")
+def recently_played(state: SpotifyState = Depends(get_spotify_state)):
+    """The last songs played (up to 50), newest first, each once."""
+
+    items = _call(state, library_service.get_recently_played)
+    return {"items": [item.to_dict() for item in items]}
 
 
 @liked_router.get("/contains")

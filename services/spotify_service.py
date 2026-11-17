@@ -16,6 +16,8 @@ SPOTIFY_SCOPES = [
     "user-modify-playback-state",   # play/pause/skip/seek (Premium only)
     "playlist-read-private",        # the user's own and followed playlists
     "playlist-read-collaborative",
+    "playlist-modify-public",       # add songs to your playlists
+    "playlist-modify-private",
     "user-library-read",            # liked songs
     "user-library-modify",          # like / unlike
     "user-read-recently-played",

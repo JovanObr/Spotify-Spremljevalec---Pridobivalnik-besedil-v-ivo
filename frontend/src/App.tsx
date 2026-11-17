@@ -11,6 +11,7 @@ import { LikedView } from "./views/LikedView";
 import { NowPlayingView } from "./views/NowPlayingView";
 import { PlaylistView } from "./views/PlaylistView";
 import { QueueView } from "./views/QueueView";
+import { RecentView } from "./views/RecentView";
 import { SearchView } from "./views/SearchView";
 
 export default function App() {
@@ -43,6 +44,7 @@ export default function App() {
               <Route path="queue" element={<QueueView />} />
               <Route path="library" element={<LibraryView />} />
               <Route path="library/liked" element={<LikedView />} />
+              <Route path="library/recent" element={<RecentView />} />
               <Route path="library/:playlistId" element={<PlaylistView />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

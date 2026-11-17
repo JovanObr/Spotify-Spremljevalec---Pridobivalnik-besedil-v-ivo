@@ -17,6 +17,9 @@ venv/
 # Spotify authentication cache
 .cache
 
+# Saved lyrics and AI answers (persistent cache)
+.data/
+
 # IDEs
 .vscode/
 .idea/

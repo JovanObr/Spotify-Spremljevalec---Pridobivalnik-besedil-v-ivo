@@ -22,6 +22,7 @@ from urllib.parse import quote
 import requests
 
 from core.config import get_lyrics_providers
+from utils import persistent_cache
 from utils.cache import TTLCache
 from utils.single_flight import SingleFlight
 from utils.text import normalize, same_name as _same_name  # noqa: F401 (normalize re-exported)
@@ -427,6 +428,38 @@ def _lookup(query: LyricsQuery) -> tuple[Lyrics | None, bool]:
     return None, True
 
 
+# On disk: found lyrics for long; "not found" briefly, since sources add songs
+LYRICS_FOUND_TTL = 90 * persistent_cache.DAY
+LYRICS_MISSING_TTL = 3 * persistent_cache.DAY
+
+
+def _encode_lyrics(lyrics: Lyrics | None):
+    if lyrics is None:
+        return None
+    return {
+        "track_name": lyrics.track_name,
+        "artist_name": lyrics.artist_name,
+        "album_name": lyrics.album_name,
+        "plain_lyrics": lyrics.plain_lyrics,
+        "synced_lyrics": lyrics.synced_lyrics,
+        "instrumental": lyrics.instrumental,
+        "source": lyrics.source,
+        "lines": [[line.time_ms, line.text] for line in lyrics.lines],
+    }
+
+
+def _decode_lyrics(data) -> Lyrics | None:
+    if data is None:
+        return None
+    lines = [LyricLine(time_ms=int(time_ms), text=str(text)) for time_ms, text in data.pop("lines")]
+    return Lyrics(**data, lines=lines)
+
+
+def _query_key(query: LyricsQuery):
+    return [query.artist.casefold(), query.title.casefold(),
+            (query.album or "").casefold(), query.duration_seconds]
+
+
 def get_lyrics(
     artist: str,
     title: str,
@@ -476,10 +509,24 @@ def get_lyrics(
         if _cache.has(query):
             return _cache.get(query)
 
+        # Found before, possibly in an earlier run of the app
+        stored = persistent_cache.store().get("lyrics", _query_key(query))
+        if stored is not persistent_cache.MISSING:
+            try:
+                lyrics = _decode_lyrics(stored)
+                _cache.set(query, lyrics)
+                return lyrics
+            except (KeyError, TypeError, ValueError):
+                pass  # old format: look it up again
+
         lyrics, complete = _lookup(query)
 
         if complete:
             _cache.set(query, lyrics)
+            persistent_cache.store().set(
+                "lyrics", _query_key(query), _encode_lyrics(lyrics),
+                LYRICS_FOUND_TTL if lyrics else LYRICS_MISSING_TTL,
+            )
 
         return lyrics
 

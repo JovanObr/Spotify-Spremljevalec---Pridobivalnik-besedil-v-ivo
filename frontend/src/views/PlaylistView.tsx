@@ -124,7 +124,7 @@ function PlaylistContent({ playlist }: { playlist: PlaylistDetail }) {
             <span className="text-right">#</span>
             <span>{strings.playlist.columns.title}</span>
             <span className="max-md:hidden">{strings.playlist.columns.album}</span>
-            <span className="text-right">{strings.playlist.columns.duration}</span>
+            <span className="text-right max-sm:hidden">{strings.playlist.columns.duration}</span>
             <span />
           </div>
 

@@ -3,6 +3,7 @@ import type { Recommendation, Track } from "../api/types";
 import { useRecommendations } from "../hooks/queries";
 import { strings } from "../lib/strings";
 import { usePlayback } from "../playback/PlaybackProvider";
+import { AddToPlaylistButton } from "./AddToPlaylistButton";
 
 interface Props {
   track: Track;
@@ -117,6 +118,7 @@ function RecommendationRow({ recommendation }: { recommendation: Recommendation 
             path="M8 5.5v13L19 12z"
             filled
           />
+          <AddToPlaylistButton track={track} />
           <IconButton
             label={strings.recommendations.addToQueue(track.title)}
             disabled={isBusy}

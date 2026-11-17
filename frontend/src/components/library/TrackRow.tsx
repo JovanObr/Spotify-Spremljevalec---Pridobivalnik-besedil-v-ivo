@@ -2,11 +2,12 @@ import type { Track } from "../../api/types";
 import { formatDuration } from "../../lib/format";
 import { strings } from "../../lib/strings";
 import { usePlayback } from "../../playback/PlaybackProvider";
+import { AddToPlaylistButton } from "../AddToPlaylistButton";
 import { QueueIcon } from "../icons";
 
 // Shared by the column header and the rows so they always line up
 export const TRACK_GRID =
-  "grid grid-cols-[2rem_minmax(0,1fr)_3.5rem_2.5rem] items-center gap-x-3 md:grid-cols-[2.5rem_minmax(0,3fr)_minmax(0,2fr)_4rem_2.5rem] md:gap-x-4";
+  "grid grid-cols-[1.75rem_minmax(0,1fr)_4.75rem] items-center gap-x-3 sm:grid-cols-[2rem_minmax(0,1fr)_3.5rem_4.75rem] md:grid-cols-[2.5rem_minmax(0,3fr)_minmax(0,2fr)_4rem_4.75rem] md:gap-x-4";
 
 interface Props {
   track: Track;
@@ -20,8 +21,9 @@ interface Props {
 }
 
 /**
- * A song in a list. The whole row plays it; the queue button on the right is
- * a separate control layered above the row's play button.
+ * A song in a list. The whole row plays it; the add-to-playlist and queue
+ * buttons on the right are separate controls layered above the row's play
+ * button.
  */
 export function TrackRow({ track, number, isCurrent, isPlaying, onPlay, hideAlbum = false }: Props) {
   const { addToQueue, isBusy } = usePlayback();
@@ -64,11 +66,17 @@ export function TrackRow({ track, number, isCurrent, isPlaying, onPlay, hideAlbu
           {track.album}
         </span>
 
-        <span className="text-right text-sm text-ink-faint tabular-nums">
+        <span className="text-right text-sm text-ink-faint tabular-nums max-sm:hidden">
           {formatDuration(track.duration_ms)}
         </span>
 
-        <span className="flex justify-end">
+        <span className="flex justify-end gap-0.5">
+          {playable && track.uri && (
+            <AddToPlaylistButton
+              track={track}
+              className="pointer-events-auto opacity-0 group-hover:opacity-100 focus-visible:opacity-100 aria-expanded:opacity-100 max-lg:opacity-100"
+            />
+          )}
           {playable && track.uri && (
             <button
               type="button"

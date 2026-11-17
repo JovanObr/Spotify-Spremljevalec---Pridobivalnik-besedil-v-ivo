@@ -10,6 +10,7 @@ import type {
   RepeatMode,
   SearchResults,
   PlaylistDetail,
+  PlaylistItem,
   PlaylistItemsPage,
   PlaylistSummary,
   RecommendationsResponse,
@@ -154,6 +155,15 @@ export const api = {
 
   likedTracks: (offset: number) =>
     request<PlaylistItemsPage>(`/api/library/tracks?offset=${offset}`),
+
+  recentlyPlayed: () => request<{ items: PlaylistItem[] }>("/api/library/recent"),
+
+  /** Add songs to the end of one of the user's playlists. */
+  addToPlaylist: (playlistId: string, uris: string[]) =>
+    post<{ added: number; snapshot_id: string | null }>(
+      `/api/playlists/${encodeURIComponent(playlistId)}/items`,
+      { uris },
+    ),
 
   likedContains: (uris: string[]) =>
     request<Record<string, boolean>>(

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import type { Playback } from "../api/types";
 import { strings } from "../lib/strings";
+import { AddToPlaylistButton } from "./AddToPlaylistButton";
 import { LikeButton } from "./LikeButton";
 import { SeekBar } from "./SeekBar";
 
@@ -46,7 +47,8 @@ export function NowPlaying({ playback, progressMs, controls, extras, onSeek }: P
           <p className="mt-2 text-lg text-ink-soft max-lg:mt-1 max-lg:text-base">{track.artist}</p>
           <p className="mt-0.5 text-sm text-ink-faint">{track.album}</p>
         </div>
-        <div className="-mt-1 -mr-2">
+        <div className="-mt-1 -mr-2 flex items-center">
+          <AddToPlaylistButton track={track} size={21} className="size-10" />
           <LikeButton track={track} size={22} />
         </div>
       </div>

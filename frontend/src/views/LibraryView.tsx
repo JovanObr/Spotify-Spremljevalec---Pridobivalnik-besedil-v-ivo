@@ -7,6 +7,7 @@ import { useLikedTracks, usePlaylists } from "../hooks/queries";
 import { strings } from "../lib/strings";
 import { usePlayback } from "../playback/PlaybackProvider";
 import { LikedCover } from "./LikedView";
+import { RecentCover } from "./RecentView";
 
 export function LibraryView() {
   const disconnect = useDisconnect();
@@ -36,7 +37,7 @@ export function LibraryView() {
         </div>
       ) : (
         <>
-          <Section title={strings.library.yours} playlists={yours} leading={<LikedCard />} />
+          <Section title={strings.library.yours} playlists={yours} leading={<><LikedCard /><RecentCard /></>} />
           <Section title={strings.library.following} playlists={following} />
           {playlists.length === 0 && (
             <p className="mt-6 max-w-lg text-ink-soft">{strings.library.empty}</p>
@@ -64,7 +65,7 @@ function Section({
 }: {
   title: string;
   playlists: PlaylistSummary[];
-  /** An extra first tile (Liked Songs). */
+  /** Extra first tiles (Liked Songs, Recently played). */
   leading?: React.ReactNode;
 }) {
   const { playback, playContext } = usePlayback();
@@ -116,6 +117,20 @@ function LikedCard() {
         <span className="mt-0.5 block text-sm text-ink-faint">
           {total != null ? strings.library.songs(total) : "\u00a0"}
         </span>
+      </Link>
+    </li>
+  );
+}
+
+function RecentCard() {
+  return (
+    <li>
+      <Link to="/library/recent" className="block rounded-md">
+        <RecentCover className="w-full" />
+        <span className="mt-3 block text-[0.95rem] leading-snug font-[600] text-ink">
+          {strings.recent.title}
+        </span>
+        <span className="mt-0.5 block text-sm text-ink-faint">{strings.recent.tile}</span>
       </Link>
     </li>
   );

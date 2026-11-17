@@ -1,5 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useCallback, useRef, useState } from "react";
 
 import { useDevices } from "../hooks/queries";
 import { strings } from "../lib/strings";
@@ -7,9 +6,7 @@ import type { Device } from "../api/types";
 import { usePlayback } from "../playback/PlaybackProvider";
 import { useWebPlayer } from "../playback/WebPlayerProvider";
 import { DevicesIcon } from "./icons";
-
-const PANEL_WIDTH = 288;
-const MARGIN = 8;
+import { Popover } from "./Popover";
 
 interface Props {
   /** Preferred side; flips automatically when there isn't room. */
@@ -46,70 +43,17 @@ export function DevicePicker({ placement = "below", showName = true }: Props) {
       : webPlayer.problem
         ? strings.devices.webPlayer[webPlayer.problem]
         : strings.devices.webPlayer.connecting;
-  const root = useRef<HTMLDivElement>(null);
   const button = useRef<HTMLButtonElement>(null);
-  const panel = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState<React.CSSProperties>({ visibility: "hidden" });
-
-  // The panel is rendered into <body> (a portal) with position: fixed, so
-  // scrolling containers can't clip it and blurred bars (backdrop-filter
-  // changes what "fixed" is relative to) can't shift it. It's placed next
-  // to the button, inside the window.
-  useLayoutEffect(() => {
-    if (!open || !button.current || !panel.current) return;
-    const place = () => {
-      const anchor = button.current!.getBoundingClientRect();
-      const height = panel.current!.offsetHeight;
-      const roomBelow = window.innerHeight - anchor.bottom - MARGIN;
-      const below = placement === "below" ? roomBelow >= height || roomBelow > anchor.top : anchor.top < height;
-      const left = Math.min(
-        Math.max(MARGIN, anchor.left),
-        document.documentElement.clientWidth - PANEL_WIDTH - MARGIN,
-      );
-      setPosition(
-        below
-          ? { top: anchor.bottom + MARGIN, left }
-          : { bottom: window.innerHeight - anchor.top + MARGIN, left },
-      );
-    };
-    place();
-    window.addEventListener("resize", place);
-    window.addEventListener("scroll", place, true);
-    return () => {
-      window.removeEventListener("resize", place);
-      window.removeEventListener("scroll", place, true);
-    };
-  }, [open, placement, devices?.length, isPending]);
-
-  // Close on outside click or Escape
-  useEffect(() => {
-    if (!open) return;
-    const onClick = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (!root.current?.contains(target) && !panel.current?.contains(target)) setOpen(false);
-    };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
+  const close = useCallback(() => setOpen(false), []);
 
   const currentName = playback?.device?.name;
 
   return (
-    <div ref={root} className="relative">
+    <div className="relative">
       <button
         ref={button}
         type="button"
-        onClick={() => {
-          setPosition({ visibility: "hidden" });
-          setOpen((value) => !value);
-        }}
+        onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
         aria-haspopup="true"
         title={strings.devices.title}
@@ -125,13 +69,14 @@ export function DevicePicker({ placement = "below", showName = true }: Props) {
         )}
       </button>
 
-      {open &&
-        createPortal(
-        <div
-          ref={panel}
-          style={{ ...position, width: PANEL_WIDTH }}
-          className="fixed z-50 max-h-[60vh] overflow-y-auto rounded-xl border border-line bg-bg-deep/95 p-2 shadow-2xl backdrop-blur-lg"
-        >
+      <Popover
+        open={open}
+        onClose={close}
+        anchor={button}
+        placement={placement}
+        contentKey={`${devices?.length}-${isPending}`}
+        label={strings.devices.title}
+      >
           <p className="px-2.5 pt-1.5 pb-2 text-sm font-[600] text-ink">{strings.devices.title}</p>
 
           {isError ? (
@@ -174,9 +119,7 @@ export function DevicePicker({ placement = "below", showName = true }: Props) {
           )}
 
           {webNote && <p className="px-2.5 pt-1 pb-2 text-xs text-ink-faint">{webNote}</p>}
-        </div>,
-          document.body,
-        )}
+      </Popover>
     </div>
   );
 }

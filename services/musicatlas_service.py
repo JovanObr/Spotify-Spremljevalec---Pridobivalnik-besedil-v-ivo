@@ -14,6 +14,7 @@ from dataclasses import dataclass
 import requests
 
 from core.config import get_musicatlas_api_key
+from utils import persistent_cache
 from utils.cache import TTLCache
 
 
@@ -82,6 +83,16 @@ def similar_tracks(artist: str, title: str) -> SimilarTracks:
     if cached is not None:
         return cached
 
+    # The free tier allows 100 requests a day, so answers are kept on disk
+    stored = persistent_cache.store().get("musicatlas", list(key))
+    if stored is not persistent_cache.MISSING:
+        try:
+            result = _decode(stored)
+            _cache.set(key, result)
+            return result
+        except (KeyError, TypeError, ValueError):
+            pass
+
     try:
         response = _session.post(
             f"{BASE_URL}/similar_tracks",
@@ -111,7 +122,7 @@ def similar_tracks(artist: str, title: str) -> SimilarTracks:
 
     if data.get("in_catalog") is False or data.get("success") is False:
         result = SimilarTracks(matches=[], tags=[], in_catalog=False)
-        _cache.set(key, result)
+        _remember(key, result)
         return result
 
     matches = [
@@ -130,8 +141,32 @@ def similar_tracks(artist: str, title: str) -> SimilarTracks:
     ]
 
     result = SimilarTracks(matches=[m for m in matches if m.title], tags=tags[:6])
-    _cache.set(key, result)
+    _remember(key, result)
     return result
+
+
+STORE_TTL = 30 * persistent_cache.DAY
+
+
+def _remember(key, result: "SimilarTracks") -> None:
+    _cache.set(key, result)
+    persistent_cache.store().set("musicatlas", list(key), _encode(result), STORE_TTL)
+
+
+def _encode(result: "SimilarTracks") -> dict:
+    return {
+        "matches": [[m.artist, m.title, m.spotify_id] for m in result.matches],
+        "tags": list(result.tags),
+        "in_catalog": result.in_catalog,
+    }
+
+
+def _decode(data: dict) -> "SimilarTracks":
+    return SimilarTracks(
+        matches=[SimilarTrack(artist=a, title=t, spotify_id=i) for a, t, i in data["matches"]],
+        tags=list(data["tags"]),
+        in_catalog=bool(data["in_catalog"]),
+    )
 
 
 def clear_cache() -> None:

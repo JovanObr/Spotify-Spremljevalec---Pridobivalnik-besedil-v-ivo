@@ -497,6 +497,29 @@ class TestApi(unittest.TestCase):
         self.assertEqual(data["total"], 0)
         mock_liked.assert_called_once_with(self.state.client, 50)
 
+    @patch("services.library_service.get_recently_played", return_value=[])
+    def test_recently_played(self, mock_recent):
+        self.assertEqual(self.client.get("/api/library/recent").json(), {"items": []})
+        mock_recent.assert_called_once_with(self.state.client)
+
+    @patch("services.library_service.add_to_playlist", return_value="snap")
+    def test_add_to_playlist(self, mock_add):
+        response = self.client.post("/api/playlists/abc123/items", json={"uris": ["spotify:track:a"]})
+
+        self.assertEqual(response.json(), {"added": 1, "snapshot_id": "snap"})
+        mock_add.assert_called_once_with(self.state.client, "abc123", ["spotify:track:a"])
+
+    def test_add_to_playlist_validates_uris(self):
+        response = self.client.post("/api/playlists/abc123/items", json={"uris": ["spotify:album:a"]})
+        self.assertEqual(response.status_code, 422)
+
+    @patch("services.library_service.add_to_playlist",
+           side_effect=SpotifyException(403, -1, "Forbidden"))
+    def test_add_to_someone_elses_playlist(self, _):
+        response = self.client.post("/api/playlists/abc123/items", json={"uris": ["spotify:track:a"]})
+        self.assertEqual(response.status_code, 403)
+        self.assertIn("own or collaborate", response.json()["detail"])
+
     @patch("services.library_service.are_liked", return_value={"spotify:track:a": True})
     def test_liked_contains(self, _):
         data = self.client.get("/api/library/contains?uris=spotify:track:a").json()

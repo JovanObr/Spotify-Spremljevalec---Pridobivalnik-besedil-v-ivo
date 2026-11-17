@@ -145,6 +145,22 @@ This is the step that makes it a real replacement. Today the app is a **remote c
 
 ---
 
+## gRPC terminal client ✅ Done (course assignment)
+
+The terminal app used to call Spotify itself and only printed the song every 5 seconds. Now `python -m grpc_api` runs a gRPC server (`grpc_api/companion.proto`: service `SoundCompanion`, five unary RPCs plus the server-streaming `WatchPlayback`) on top of the same services as the web API, and `main.py` is its client: a menu with a live lyrics view, now playing, search-and-pick (lyrics, facts, play) and playback controls. The web frontend still uses the REST API, since browsers can't call gRPC without a proxy. Details in the README's "gRPC service" section.
+
+---
+
+## Quality of life ✅ Done
+
+- **One start command:** `npm run dev` in `frontend` (or `start.bat`) runs the API and Vite together via `frontend/scripts/dev.mjs`, which has no dependencies. `npm run dev:web` starts Vite alone.
+- **Recently played:** `GET /api/library/recent` (Spotify keeps the last 50 plays; repeats are shown once) and a Library tile next to Liked Songs.
+- **Add to playlist:** `POST /api/playlists/{id}/items` and a ⊕ button on every song. Only playlists you own or collaborate on are offered, since Spotify refuses the rest. Needed the `playlist-modify-public/private` scopes, so everyone logs in once more.
+- **Persistent cache:** `utils/persistent_cache.py` keeps lyrics (90 days; "not found" for 3), AI answers (facts, suggestions, reasons, translations, explanations: 90 days) and MusicAtlas results (30 days) in `.data/cache.sqlite3`. Both servers share it. It's only turned on by `python -m api` and `python -m grpc_api`, so tests never touch it; `PERSISTENT_CACHE=off` disables it.
+- **CI:** `.github/workflows/ci.yml` runs the Python tests and the frontend type check + build on every push.
+
+---
+
 ## Out of scope (the "fluff")
 
 Podcasts and audiobooks, AI-generated playlists, social and friend activity, Wrapped-style statistics, artist bios and concert listings, Canvas videos, and editorial home-feed carousels.

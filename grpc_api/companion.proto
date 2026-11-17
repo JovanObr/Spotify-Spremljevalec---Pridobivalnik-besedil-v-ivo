@@ -1,0 +1,159 @@
+// Spotify Sound Companion over gRPC.
+//
+// The server (python -m grpc_api) wraps the same services the web API uses;
+// the terminal app (python main.py) is the client.
+//
+// After editing this file, regenerate the Python code:  python -m grpc_api.generate
+
+syntax = "proto3";
+
+package soundcompanion;
+
+service SoundCompanion {
+  // What is playing right now (one answer).
+  rpc GetNowPlaying (NowPlayingRequest) returns (NowPlayingResponse);
+
+  // Find songs on Spotify.
+  rpc SearchTracks (SearchRequest) returns (SearchResponse);
+
+  // Lyrics for a song the user picked (synced lines when available).
+  rpc GetLyrics (LyricsRequest) returns (LyricsResponse);
+
+  // AI-written facts about a song the user picked.
+  rpc GetSongFacts (FactsRequest) returns (FactsResponse);
+
+  // Play, pause, skip, or play a chosen song.
+  rpc ControlPlayback (ControlRequest) returns (ControlResponse);
+
+  // Server streaming: the server keeps sending events (song changed,
+  // paused/resumed, the lyric line being sung now) until the client stops.
+  rpc WatchPlayback (WatchRequest) returns (stream PlaybackEvent);
+}
+
+// ---------------------------------------------------------------------------
+// Data types
+// ---------------------------------------------------------------------------
+
+message Track {
+  string id = 1;
+  string title = 2;
+  repeated string artists = 3;
+  string album = 4;
+  int32 duration_ms = 5;
+  string uri = 6;          // spotify:track:...
+  string album_uri = 7;    // lets a song play "inside its album"
+  string artwork_url = 8;
+  string spotify_url = 9;
+  bool is_playable = 10;
+}
+
+message Playback {
+  Track track = 1;
+  bool is_playing = 2;
+  int32 progress_ms = 3;
+  string device_name = 4;
+  bool shuffle = 5;
+  string repeat = 6;       // "off", "context" or "track"
+}
+
+message LyricLine {
+  int32 time_ms = 1;       // when the line starts, from the song's beginning
+  string text = 2;
+}
+
+// ---------------------------------------------------------------------------
+// Requests and responses
+// ---------------------------------------------------------------------------
+
+message NowPlayingRequest {}
+
+message NowPlayingResponse {
+  // Not set when nothing is playing (check with HasField("playback")).
+  Playback playback = 1;
+}
+
+message SearchRequest {
+  string query = 1;
+  int32 limit = 2;         // 1-10; 0 means 10
+}
+
+message SearchResponse {
+  repeated Track tracks = 1;
+}
+
+message LyricsRequest {
+  string artist = 1;
+  string title = 2;
+  string album = 3;        // optional, improves matching
+  int32 duration_ms = 4;   // optional, improves matching
+}
+
+message LyricsResponse {
+  bool found = 1;
+  bool instrumental = 2;
+  bool synced = 3;         // lines have timestamps
+  repeated LyricLine lines = 4;
+  string plain_lyrics = 5;
+  string source = 6;       // e.g. "LRCLIB"
+}
+
+message FactsRequest {
+  string artist = 1;
+  string title = 2;
+  string album = 3;
+  string language = 4;     // default "English"
+}
+
+message FactsResponse {
+  repeated string facts = 1;
+}
+
+enum PlayerAction {
+  PLAYER_ACTION_UNSPECIFIED = 0;
+  PLAYER_ACTION_PLAY = 1;
+  PLAYER_ACTION_PAUSE = 2;
+  PLAYER_ACTION_NEXT = 3;
+  PLAYER_ACTION_PREVIOUS = 4;
+  PLAYER_ACTION_PLAY_TRACK = 5;   // needs track_uri
+}
+
+message ControlRequest {
+  PlayerAction action = 1;
+  string track_uri = 2;    // for PLAYER_ACTION_PLAY_TRACK
+  string album_uri = 3;    // optional: keep playing the album afterwards
+}
+
+message ControlResponse {
+  bool ok = 1;
+  string message = 2;
+}
+
+message WatchRequest {
+  bool include_lyrics = 1;     // send lyric_line events
+  int32 poll_interval_ms = 2;  // how often the server asks Spotify; 0 = 2000
+}
+
+message PlaybackEvent {
+  int64 sent_at_ms = 1;        // server time (Unix ms), to see the delay
+
+  oneof event {
+    TrackChanged track_changed = 2;
+    PlayStateChanged play_state = 3;
+    LyricLine lyric_line = 4;
+    Idle idle = 5;
+  }
+}
+
+message TrackChanged {
+  Playback playback = 1;
+  LyricsResponse lyrics = 2;   // set when include_lyrics was requested
+}
+
+message PlayStateChanged {
+  bool is_playing = 1;
+  int32 progress_ms = 2;
+}
+
+message Idle {
+  string reason = 1;
+}

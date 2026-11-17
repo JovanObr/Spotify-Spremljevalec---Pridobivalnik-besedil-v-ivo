@@ -187,6 +187,17 @@ export function useLikedTracks() {
   });
 }
 
+/** The last songs played (up to 50), newest first. */
+export function useRecentlyPlayed() {
+  return useQuery({
+    queryKey: ["recently-played"],
+    queryFn: api.recentlyPlayed,
+    select: (data) => data.items,
+    staleTime: 30_000,
+    retry: (count, error) => !isPermanent(error) && count < 2,
+  });
+}
+
 /** Whether one song is liked. */
 export function useIsLiked(uri: string | null | undefined) {
   return useQuery({

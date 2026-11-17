@@ -110,6 +110,33 @@ class TestLibraryService(unittest.TestCase):
         self.spotify = MagicMock()
         self.spotify.me.return_value = {"id": "me"}
 
+    def test_recently_played_newest_first_each_song_once(self):
+        def play(track_id, at):
+            return {"played_at": at, "track": {"id": track_id, "type": "track", "name": track_id.upper(),
+                                               "uri": f"spotify:track:{track_id}", "artists": [], "album": {}}}
+        self.spotify.current_user_recently_played.return_value = {"items": [
+            play("a", "2026-11-12T10:03:00Z"), play("b", "2026-11-12T10:00:00Z"),
+            play("a", "2026-11-12T09:50:00Z"), None,
+        ]}
+
+        items = library_service.get_recently_played(self.spotify)
+
+        self.assertEqual([i.track.title for i in items], ["A", "B"])
+        self.assertEqual([i.position for i in items], [0, 1])
+        self.assertEqual(items[0].added_at, "2026-11-12T10:03:00Z")
+
+    def test_add_to_playlist_refreshes_cached_playlists(self):
+        self.spotify.current_user_playlists.return_value = {"items": [make_playlist("a")], "next": None}
+        library_service.list_playlists(self.spotify)
+        self.spotify.playlist_add_items.return_value = {"snapshot_id": "s2"}
+
+        snapshot = library_service.add_to_playlist(self.spotify, "a", ["spotify:track:x"])
+        library_service.list_playlists(self.spotify)
+
+        self.assertEqual(snapshot, "s2")
+        self.spotify.playlist_add_items.assert_called_once_with("a", ["spotify:track:x"])
+        self.assertEqual(self.spotify.current_user_playlists.call_count, 2)
+
     def test_list_playlists_follows_pages(self):
         self.spotify.current_user_playlists.side_effect = [
             {"items": [make_playlist("a"), make_playlist("b", owner="x")],
