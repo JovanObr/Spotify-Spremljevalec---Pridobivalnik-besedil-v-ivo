@@ -23,6 +23,7 @@ from core.config import (
     get_gemini_facts_model,
     get_gemini_recommendations_model,
 )
+from services import source_registry
 from utils import persistent_cache
 from utils.single_flight import SingleFlight
 
@@ -230,9 +231,13 @@ def _ask(model: str, system_instruction: str, prompt: str, schema: type[BaseMode
 
     Raises AIServiceError on API errors, empty or malformed answers.
     """
-    if is_gemma(model):
-        return _ask_gemma(model, system_instruction, prompt, schema)
+    with source_registry.tracking("gemini"):
+        if is_gemma(model):
+            return _ask_gemma(model, system_instruction, prompt, schema)
+        return _ask_gemini(model, system_instruction, prompt, schema)
 
+
+def _ask_gemini(model: str, system_instruction: str, prompt: str, schema: type[BaseModel]):
     from google.genai import errors
 
     client = _get_client()

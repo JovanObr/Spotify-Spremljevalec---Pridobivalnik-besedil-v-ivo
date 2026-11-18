@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <m:FullCountryInfoResponse xmlns:m="http://www.oorsprong.org/websamples.countryinfo">
+      <m:FullCountryInfoResult>
+        <m:sISOCode>GB</m:sISOCode>
+        <m:sName>United Kingdom</m:sName>
+        <m:sCapitalCity>London</m:sCapitalCity>
+        <m:sPhoneCode>44</m:sPhoneCode>
+        <m:sContinentCode>EU</m:sContinentCode>
+        <m:sCurrencyISOCode>GBP</m:sCurrencyISOCode>
+        <m:sCountryFlag>http://www.oorsprong.org/WebSamples.CountryInfo/Flags/United_Kingdom.jpg</m:sCountryFlag>
+        <m:Languages>
+          <m:tLanguage><m:sISOCode>eng</m:sISOCode><m:sName>English</m:sName></m:tLanguage>
+        </m:Languages>
+      </m:FullCountryInfoResult>
+    </m:FullCountryInfoResponse>
+  </soap:Body>
+</soap:Envelope>

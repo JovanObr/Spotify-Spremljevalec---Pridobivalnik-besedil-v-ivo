@@ -1,0 +1,22 @@
+CHARSET="ANSI";
+AXIS-VERSION="2013";
+CODEPAGE="utf-8";
+LANGUAGE="en";
+CREATION-DATE="20250601 10:00";
+SUBJECT-AREA="Culture";
+TITLE="Concerts and attendance by type of music, Slovenia";
+CONTENTS="Concerts";
+STUB="TYPE OF MUSIC";
+HEADING="YEAR","MEASURES";
+VALUES("TYPE OF MUSIC")="Choral and vocal","Popular music","Rock";
+VALUES("YEAR")="2022","2023","2024";
+VALUES("MEASURES")="Concerts","Attendance";
+UNITS="number";
+LAST-UPDATED="20250601 10:00";
+SOURCE="Statistical Office of the Republic of Slovenia";
+NOTE="Concerts held at the institutions' own venues.";
+DATA=
+1500 210000 1580 220000 1610 231000
+900 300000 950 320000 1010 ".."
+400 90000 410 95000 430 99000
+;

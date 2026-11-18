@@ -220,3 +220,35 @@ export function useSearch(query: string) {
     retry: (count, error) => !isPermanent(error) && count < 1,
   });
 }
+
+// Data sources: Wikipedia, CountryInfoService, SiStat
+
+/** Song and artist details for the current song (scraped from Wikipedia). */
+export function useDetails(track: Track | undefined) {
+  return useQuery({
+    queryKey: ["details", track?.artists[0] ?? track?.artist, track?.title],
+    queryFn: () => api.details(track!),
+    enabled: Boolean(track),
+    staleTime: 60 * 60_000, // the server keeps them a week; no need to ask often
+    retry: (count, error) => !isPermanent(error) && count < 1,
+  });
+}
+
+export function useStats() {
+  return useQuery({
+    queryKey: ["stats"],
+    queryFn: api.stats,
+    staleTime: 60 * 60_000,
+    retry: (count, error) => !isPermanent(error) && count < 1,
+  });
+}
+
+/** The sources page refreshes itself while open, to show requests as they happen. */
+export function useSources() {
+  return useQuery({
+    queryKey: ["sources"],
+    queryFn: api.sources,
+    refetchInterval: 5000,
+    retry: false,
+  });
+}

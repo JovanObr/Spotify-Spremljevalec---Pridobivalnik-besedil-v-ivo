@@ -169,3 +169,87 @@ export interface SearchResults {
   albums: AlbumResult[];
   playlists: PlaylistSummary[];
 }
+
+// Song details (Wikipedia, scraped) and the artist's country (SOAP)
+
+export interface InfoField {
+  label: string;
+  values: string[];
+}
+
+export interface WikiSong {
+  title: string;
+  url: string;
+  album: string | null;
+  fields: InfoField[];
+  artist_url: string | null;
+}
+
+export interface WikiArtist {
+  name: string;
+  url: string;
+  summary: string | null;
+  origin: string | null;
+  fields: InfoField[];
+}
+
+export interface CountryInfo {
+  iso_code: string;
+  name: string;
+  capital: string | null;
+  phone_code: string | null;
+  continent: string | null;
+  currency: string | null;
+  flag_url: string | null;
+  languages: string[];
+}
+
+export interface DetailsResponse {
+  song: WikiSong | null;
+  artist: WikiArtist | null;
+  country: CountryInfo | null;
+  errors: Record<string, string>;
+}
+
+// Music in Slovenia (SiStat, PC-Axis)
+
+export interface StatsResponse {
+  title: string;
+  contents: string | null;
+  units: string | null;
+  source: string | null;
+  last_updated: string | null;
+  notes: string[];
+  table: string;
+  table_url: string;
+  time_dimension: string | null;
+  dimensions: { name: string; values: string[] }[];
+  /** Each cell: [index in dimension 1, index in dimension 2, ..., value]. */
+  observations: (number | null)[][];
+  fetched_at: number;
+  stale: boolean;
+  error?: string;
+}
+
+// Data sources page
+
+export interface SourceStatus {
+  id: string;
+  name: string;
+  technology: string;
+  format: string;
+  provides: string;
+  refresh: string;
+  url: string;
+  refreshable: boolean;
+  state: "ok" | "error" | "unused";
+  last_success: number | null;
+  last_failure: number | null;
+  last_error: string | null;
+  requests_this_run: number;
+}
+
+export interface SourcesResponse {
+  sources: SourceStatus[];
+  delivery: { id: string; name: string; technology: string; description: string }[];
+}

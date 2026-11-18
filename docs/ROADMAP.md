@@ -161,6 +161,15 @@ The terminal app used to call Spotify itself and only printed the song every 5 s
 
 ---
 
+## More sources and technologies ✅ Done (course requirements)
+
+- **Web scraping:** `services/wikipedia_service.py` searches Wikipedia's search page and reads song and artist infoboxes with BeautifulSoup (like Naloga2). Shown as "Song details" in Now Playing.
+- **SOAP:** `services/country_service.py` builds SOAP 1.1 envelopes by hand and parses the XML answers of CountryInfoService (`ListOfCountryNamesByName`, `FullCountryInfo`) to show the artist's country.
+- **PC-Axis:** `services/stats_service.py` downloads a SiStat table as `.px` through the PX-Web API; `utils/pcaxis.py` parses it (like Naloga3, without pandas). Shown as Insights → Music in Slovenia, with filters, toggles, a sortable table and CSV export.
+- **Data sources page:** `services/source_registry.py` records every request per source; Insights → Data sources shows technology, refresh schedule, last success and errors, with "Fetch again".
+
+---
+
 ## Out of scope (the "fluff")
 
 Podcasts and audiobooks, AI-generated playlists, social and friend activity, Wrapped-style statistics, artist bios and concert listings, Canvas videos, and editorial home-feed carousels.

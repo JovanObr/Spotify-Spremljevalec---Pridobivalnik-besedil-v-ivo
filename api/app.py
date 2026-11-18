@@ -1,8 +1,8 @@
 """
 Web API for Spotify Sound Companion.
 
-Wraps the existing services (Spotify, LRCLIB lyrics, Gemini) in a small REST
-API for the React frontend, and serves the built frontend in production.
+Wraps the services (Spotify, lyrics, AI, Wikipedia, CountryInfoService,
+SiStat ...) in a small REST API for the React frontend, and serves the built frontend in production.
 Each feature area lives in its own router under api/routes/.
 
 Run with:  python -m api
@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from api.routes import ai, auth, library, lyrics, player, search
+from api.routes import ai, auth, details, library, lyrics, player, search, sources, stats
 from core.config import BASE_DIR
 
 
@@ -34,7 +34,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for module in (auth, player, library, search, lyrics, ai):
+for module in (auth, player, library, search, lyrics, ai, details, sources, stats):
     app.include_router(module.router)
 app.include_router(library.liked_router)
 

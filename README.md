@@ -38,11 +38,39 @@ There are two ways to use it:
 - **Smart recommendations:** three songs you'll probably like if you like the current one. With a MusicAtlas key they're picked by audio similarity (with the song's style tags), and Gemma writes a one-line reason for each. Without it, or when a song isn't in MusicAtlas, Gemma 4 suggests them and each is checked against Spotify search so made-up songs never appear. Play any of them now or add it to your queue.
 - **Lyrics translation:** one click shows an AI translation under every lyric line, in the language you pick (remembered in this browser). Repeated lines are translated once.
 - **What's this song about:** on request, a short AI explanation of the song's meaning based on its lyrics, with a few themes.
+- **Song details (Wikipedia, web scraping):** release date, genre, label, songwriters and producers of the current song, plus a short "About the artist" with their origin, genres and years active, read from the Wikipedia articles' infoboxes.
+- **Artist's country (SOAP):** the artist's origin from Wikipedia is matched to a country through the CountryInfoService SOAP web service, which supplies its flag, capital, language and currency.
+- **Insights → Music in Slovenia (PC-Axis):** SiStat table 1080711S, performances and attendance in Slovenian stage institutions by type of performance (symphonic and chamber, choral and vocal, jazz and improvised, ethno ...), 2016 to 2024, downloaded as a `.px` file and shown as a chart and a sortable table. Filter by type, measure and year range, toggle series, download as CSV.
+- **Insights → Data sources:** every outside source with the technology used to reach it, how often its data is refreshed, when it last answered and whether it's working, with a "Fetch again" button.
 - Prefetching: when a song starts, the lyrics, facts and recommendations for the next song in your Spotify queue are prepared in the background, so they appear instantly when it plays.
 - The page takes its colours from the current album cover.
 - Caching: lyrics and AI answers are fetched once per track, even when several requests for the same song arrive at once, and are kept on disk (`.data/cache.sqlite3`) so restarting the app doesn't spend the free AI and MusicAtlas quotas again.
 - Handling of rate limits (Spotify, LRCLIB, Gemini), expired logins, missing playback and podcasts.
 - Automated tests for the services, the web API and the gRPC server, run by GitHub Actions on every push.
+
+## External sources and technologies
+
+The app combines eight outside sources, reached with four different technologies, and delivers the data to its two clients over REST and gRPC. The **Insights → Data sources** page shows the same list live, with each source's last successful request.
+
+| Source | Technology | What it provides | Refreshed |
+|--------|-----------|------------------|-----------|
+| Spotify Web API | REST (JSON, OAuth 2.0) | Now playing, playback, search, playlists, liked and recently played songs | Player state every 3 s; lists every 30 to 60 s |
+| LRCLIB | REST (JSON) | Synced lyrics | Once per song; kept 90 days, "not found" rechecked after 3 days |
+| lyrics.ovh | REST (JSON) | Plain lyrics as a backup | Once per song; kept 90 days |
+| Google AI Studio (Gemini, Gemma) | REST (JSON with a schema) | Facts, translations, song meanings, recommendation reasons | Once per song and language; kept 90 days |
+| MusicAtlas | REST (JSON) | Similar-sounding songs and style tags | Once per song; kept 30 days |
+| Wikipedia | **Web scraping** (HTML, BeautifulSoup) | Song details, artist summary and origin | Once per song or artist; kept 7 days |
+| CountryInfoService | **SOAP** (XML envelopes) | The artist's country: flag, capital, language, currency | Kept 30 days |
+| SiStat (Statistical Office of Slovenia) | **PC-Axis** (`.px` from the PX-Web API) | Music in Slovenia: performances and attendance by type of performance, 2016 to 2024 (table 1080711S) | Every 24 hours; the last copy is shown if SiStat is down |
+
+Delivery: the web app talks to the Python server over **REST** (FastAPI), and the terminal app over **gRPC** (`python -m grpc_api`, including a server-streaming RPC).
+
+How the course requirements are met:
+
+- **At least four outside sources, kept up to date:** eight sources, each with a refresh interval that fits its data (above). Saved data can be cleared per source on the Data sources page.
+- **A different technology per source:** REST, web scraping, SOAP and PC-Axis for the sources, plus gRPC between the server and the terminal client.
+- **Interactive interface with actions on the data:** search, filter and sort (Music in Slovenia: filters, year range, series toggles, sortable table, CSV export), add and remove (liked songs, add to playlist, queue), playback control, lyric translation, and refetching a source.
+- **A coherent whole:** every source serves the same goal, a focused Spotify companion: what's playing, its lyrics, what the song is and who made it, and the music scene around it.
 
 ## Requirements
 
@@ -196,6 +224,10 @@ After editing the `.proto` file, regenerate the Python code with `python -m grpc
 | GET | `/api/playlists` | Every playlist in your library |
 | GET | `/api/playlists/{id}` | One playlist's details (`items_available` says whether its songs can be listed) |
 | GET | `/api/playlists/{id}/items?offset=` | 50 songs at a time |
+| GET | `/api/details?artist=&title=` | Song and artist details (Wikipedia) and the artist's country (SOAP) |
+| GET | `/api/stats` | The SiStat table: dimensions, cells, units, last update |
+| GET | `/api/sources` | Every outside source with its technology, refresh schedule and status |
+| POST | `/api/sources/{id}/refresh` | Clear a source's saved data so it's fetched again (not for AI/MusicAtlas) |
 | POST | `/api/playlists/{id}/items` | Add songs `{"uris": [...]}` to a playlist you own or collaborate on |
 | GET | `/api/lyrics?artist=&title=&album=&duration_ms=` | Lyrics with parsed synced lines |
 | GET | `/api/facts?artist=&title=&album=&language=` | AI-generated facts |
@@ -257,6 +289,10 @@ npm run typecheck
 │   ├── ai_service.py        Gemini/Gemma: facts, suggestions, reasons, translation, meaning
 │   ├── musicatlas_service.py  MusicAtlas similar-tracks client (audio-based)
 │   ├── recommendation_service.py  MusicAtlas picks, or AI suggestions verified with Spotify search
+│   ├── wikipedia_service.py Web scraping: song and artist details from Wikipedia
+│   ├── country_service.py   SOAP client for CountryInfoService
+│   ├── stats_service.py     SiStat table as a PC-Axis file (Music in Slovenia)
+│   ├── source_registry.py   Every outside source, its technology and its last request
 │   └── prefetch_service.py  Prepares lyrics, facts and recommendations for the current and next song
 │
 ├── utils/
@@ -264,6 +300,7 @@ npm run typecheck
 │   ├── spotify_errors.py    Retry delays for Spotify errors
 │   ├── cache.py             Small in-memory cache with expiry
 │   ├── persistent_cache.py  SQLite cache that survives restarts (.data/cache.sqlite3)
+│   ├── pcaxis.py            PC-Axis (.px) parser
 │   ├── single_flight.py     Makes simultaneous requests for the same song share one lookup
 │   └── text.py              Loose title/artist matching (accents, "The", punctuation)
 │

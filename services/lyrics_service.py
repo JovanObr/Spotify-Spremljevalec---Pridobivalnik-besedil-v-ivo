@@ -22,6 +22,7 @@ from urllib.parse import quote
 import requests
 
 from core.config import get_lyrics_providers
+from services import source_registry
 from utils import persistent_cache
 from utils.cache import TTLCache
 from utils.single_flight import SingleFlight
@@ -171,7 +172,15 @@ class LyricsQuery:
 # HTTP
 # ---------------------------------------------------------------------------
 
+SOURCE_IDS = {"LRCLIB": "lrclib", "lyrics.ovh": "lyrics_ovh"}
+
+
 def _get_json(url: str, params: dict | None, source: str, timeout: float):
+    with source_registry.tracking(SOURCE_IDS.get(source, source)):
+        return _fetch_json(url, params, source, timeout)
+
+
+def _fetch_json(url: str, params: dict | None, source: str, timeout: float):
     try:
         response = _session.get(url, params=params, timeout=timeout)
 

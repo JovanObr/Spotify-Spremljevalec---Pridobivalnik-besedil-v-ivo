@@ -14,6 +14,7 @@ from dataclasses import dataclass
 import requests
 
 from core.config import get_musicatlas_api_key
+from services import source_registry
 from utils import persistent_cache
 from utils.cache import TTLCache
 
@@ -93,6 +94,18 @@ def similar_tracks(artist: str, title: str) -> SimilarTracks:
         except (KeyError, TypeError, ValueError):
             pass
 
+    with source_registry.tracking("musicatlas"):
+        data = _request(artist, title, api_key)
+
+    if data.get("in_catalog") is False or data.get("success") is False:
+        result = SimilarTracks(matches=[], tags=[], in_catalog=False)
+        _remember(key, result)
+        return result
+
+    return _parse(key, data)
+
+
+def _request(artist: str, title: str, api_key: str) -> dict:
     try:
         response = _session.post(
             f"{BASE_URL}/similar_tracks",
@@ -119,12 +132,10 @@ def similar_tracks(artist: str, title: str) -> SimilarTracks:
 
     if not isinstance(data, dict):
         raise MusicAtlasError("MusicAtlas returned an unexpected response.")
+    return data
 
-    if data.get("in_catalog") is False or data.get("success") is False:
-        result = SimilarTracks(matches=[], tags=[], in_catalog=False)
-        _remember(key, result)
-        return result
 
+def _parse(key, data: dict) -> "SimilarTracks":
     matches = [
         SimilarTrack(
             artist=str(match.get("artist") or "").strip(),

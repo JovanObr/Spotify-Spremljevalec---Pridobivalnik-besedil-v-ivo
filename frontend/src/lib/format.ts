@@ -42,3 +42,29 @@ export function formatTotalDuration(ms: number): string {
   const rest = minutes % 60;
   return rest ? `${hours} h ${rest} min` : `${hours} h`;
 }
+
+/** "just now", "5 minutes ago", "3 hours ago", "2 days ago" (from Unix seconds). */
+export function timeAgo(unixSeconds: number, now = Date.now()): string {
+  const seconds = Math.max(0, Math.round(now / 1000 - unixSeconds));
+  if (seconds < 45) return "just now";
+  const units: [number, string][] = [
+    [86400, "day"],
+    [3600, "hour"],
+    [60, "minute"],
+  ];
+  for (const [size, name] of units) {
+    if (seconds >= size) {
+      const count = Math.round(seconds / size);
+      return `${count} ${name}${count === 1 ? "" : "s"} ago`;
+    }
+  }
+  return "a minute ago";
+}
+
+/** SiStat's "20250601 10:00" as "1 June 2025". */
+export function formatPxDate(value: string | null | undefined): string | null {
+  const match = value?.match(/^(\d{4})(\d{2})(\d{2})/);
+  if (!match) return value ?? null;
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  return date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+}

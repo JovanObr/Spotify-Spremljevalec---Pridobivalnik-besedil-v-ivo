@@ -155,3 +155,13 @@ export function HistoryIcon(props: IconProps) {
     </Stroke>
   );
 }
+
+/** Bars and a trend line: the Insights page. */
+export function InsightsIcon(props: IconProps) {
+  return (
+    <Stroke {...props}>
+      <path d="M4 20h16" />
+      <path d="M7 16v-4M12 16V8M17 16v-6" />
+    </Stroke>
+  );
+}

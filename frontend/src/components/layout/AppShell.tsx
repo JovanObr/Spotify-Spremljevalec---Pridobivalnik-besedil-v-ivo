@@ -7,13 +7,14 @@ import { NavLink, Outlet, useLocation } from "react-router";
 import { usePlayback } from "../../playback/PlaybackProvider";
 import { useDisconnect } from "../../hooks/useDisconnect";
 import { strings } from "../../lib/strings";
-import { AppMark, LibraryIcon, LogoutIcon, NowPlayingIcon, SearchIcon } from "../icons";
+import { AppMark, InsightsIcon, LibraryIcon, LogoutIcon, NowPlayingIcon, SearchIcon } from "../icons";
 import { MiniPlayer } from "./MiniPlayer";
 
 const NAV_ITEMS = [
   { to: "/", label: strings.nav.nowPlaying, Icon: NowPlayingIcon, end: true },
   { to: "/search", label: strings.nav.search, Icon: SearchIcon, end: false },
   { to: "/library", label: strings.nav.library, Icon: LibraryIcon, end: false },
+  { to: "/insights", label: strings.nav.insights, Icon: InsightsIcon, end: false },
 ];
 
 export function AppShell() {
@@ -89,7 +90,7 @@ export function AppShell() {
       {/* Mobile tab bar */}
       <nav
         aria-label={strings.nav.main}
-        className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-3 border-t border-line bg-bg-deep/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 border-t border-line bg-bg-deep/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg lg:hidden"
       >
         {NAV_ITEMS.map(({ to, label, Icon, end }) => (
           <NavLink

@@ -1,5 +1,8 @@
 import type {
+  DetailsResponse,
   FactsResponse,
+  SourcesResponse,
+  StatsResponse,
   LyricsResponse,
   MeaningResponse,
   TranslationResponse,
@@ -95,6 +98,19 @@ export const api = {
     if (track.duration_ms) params.set("duration_ms", String(track.duration_ms));
     return request<MeaningResponse>(`/api/meaning?${params}`);
   },
+
+  /** Song and artist details from Wikipedia, country from CountryInfoService. */
+  details: (track: Track) =>
+    request<DetailsResponse>(
+      `/api/details?${new URLSearchParams({ artist: track.artists[0] ?? track.artist, title: track.title })}`,
+    ),
+
+  stats: () => request<StatsResponse>("/api/stats"),
+
+  sources: () => request<SourcesResponse>("/api/sources"),
+
+  refreshSource: (id: string) =>
+    request<{ refreshed: string }>(`/api/sources/${encodeURIComponent(id)}/refresh`, { method: "POST" }),
 
   facts: (track: Track, language: string) =>
     request<FactsResponse>(`/api/facts?${trackQuery(track, { language })}`),

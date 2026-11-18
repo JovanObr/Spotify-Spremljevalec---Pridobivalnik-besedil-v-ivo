@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <m:ListOfCountryNamesByNameResponse xmlns:m="http://www.oorsprong.org/websamples.countryinfo">
+      <m:ListOfCountryNamesByNameResult>
+        <m:tCountryCodeAndName><m:sISOCode>CA</m:sISOCode><m:sName>Canada</m:sName></m:tCountryCodeAndName>
+        <m:tCountryCodeAndName><m:sISOCode>SI</m:sISOCode><m:sName>Slovenia</m:sName></m:tCountryCodeAndName>
+        <m:tCountryCodeAndName><m:sISOCode>SE</m:sISOCode><m:sName>Sweden</m:sName></m:tCountryCodeAndName>
+        <m:tCountryCodeAndName><m:sISOCode>GB</m:sISOCode><m:sName>United Kingdom</m:sName></m:tCountryCodeAndName>
+        <m:tCountryCodeAndName><m:sISOCode>US</m:sISOCode><m:sName>United States</m:sName></m:tCountryCodeAndName>
+      </m:ListOfCountryNamesByNameResult>
+    </m:ListOfCountryNamesByNameResponse>
+  </soap:Body>
+</soap:Envelope>

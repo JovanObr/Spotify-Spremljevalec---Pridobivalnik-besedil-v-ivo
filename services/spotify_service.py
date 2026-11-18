@@ -3,6 +3,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
 from core.config import SPOTIFY_CACHE_PATH, get_spotify_config
+from services import source_registry
 from models.track import REPEAT_MODES, Device, Playback, Track
 
 
@@ -71,7 +72,9 @@ def get_current_playback(spotify: spotipy.Spotify) -> Playback | None:
     The current music track with full player state (device, shuffle,
     repeat, volume), or None when nothing is playing.
     """
-    return Playback.from_spotify(spotify.current_playback())
+    with source_registry.tracking("spotify"):
+        data = spotify.current_playback()
+    return Playback.from_spotify(data)
 
 
 def control_playback(spotify: spotipy.Spotify, action: str) -> None:

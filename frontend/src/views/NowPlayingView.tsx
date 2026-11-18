@@ -8,6 +8,7 @@ import { MeaningPanel } from "../components/MeaningPanel";
 import { NowPlaying } from "../components/NowPlaying";
 import { PlayerControls } from "../components/PlayerControls";
 import { RecommendationsPanel } from "../components/RecommendationsPanel";
+import { SongDetailsPanel } from "../components/SongDetailsPanel";
 import { IdleScreen } from "../components/Screens";
 import { VolumeControl } from "../components/VolumeControl";
 import { strings } from "../lib/strings";
@@ -63,6 +64,7 @@ export function NowPlayingView({
 
         <div className="flex flex-col gap-8 max-lg:hidden">
           <FactsPanel track={track} aiEnabled={aiEnabled} />
+          <SongDetailsPanel key={track.uri ?? track.title} track={track} />
           <MeaningPanel key={track.uri ?? track.title} track={track} aiEnabled={aiEnabled} />
           <RecommendationsPanel track={track} enabled={recommendationsEnabled} />
         </div>
@@ -85,6 +87,7 @@ export function NowPlayingView({
 
       <div className="flex flex-col gap-8 pb-10 lg:hidden">
         <FactsPanel track={track} aiEnabled={aiEnabled} />
+        <SongDetailsPanel key={track.uri ?? track.title} track={track} />
         <MeaningPanel key={track.uri ?? track.title} track={track} aiEnabled={aiEnabled} />
         <RecommendationsPanel track={track} enabled={recommendationsEnabled} />
       </div>

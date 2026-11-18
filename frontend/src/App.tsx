@@ -6,6 +6,7 @@ import { useStatus } from "./hooks/queries";
 import { MediaSession } from "./playback/MediaSession";
 import { PlaybackProvider } from "./playback/PlaybackProvider";
 import { WebPlayerProvider } from "./playback/WebPlayerProvider";
+import { InsightsView } from "./views/InsightsView";
 import { LibraryView } from "./views/LibraryView";
 import { LikedView } from "./views/LikedView";
 import { NowPlayingView } from "./views/NowPlayingView";
@@ -46,6 +47,7 @@ export default function App() {
               <Route path="library/liked" element={<LikedView />} />
               <Route path="library/recent" element={<RecentView />} />
               <Route path="library/:playlistId" element={<PlaylistView />} />
+              <Route path="insights/*" element={<InsightsView />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
